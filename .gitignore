@@ -1,0 +1,5 @@
+# Ignore all .env files in the agents directory
+*.env
+travenv/
+__pycache__/
+
