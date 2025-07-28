@@ -2,4 +2,4 @@
 *.env
 travenv/
 __pycache__/
-
+/agents/weather_agent.ipynb
