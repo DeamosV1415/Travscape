@@ -3,3 +3,6 @@
 travenv/
 __pycache__/
 /agents/weather_agent.ipynb
+/agents/trav_agent.ipynb
+/agents/travscape.ipynb
+/agents/apitry.ipynb
