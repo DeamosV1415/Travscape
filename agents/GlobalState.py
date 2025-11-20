@@ -6,4 +6,4 @@ from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 class AgentState(TypedDict):
   messages: Annotated[list, add_messages]
   user_request: list
-  trip_plan: list
+  trip_plan: dict

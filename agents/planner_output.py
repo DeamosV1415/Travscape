@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Literal, Dict, Any
+from typing import List, Optional, Literal, Dict, Union
 
 #Planner
 class TimeBlock(BaseModel):
@@ -15,24 +15,41 @@ class DayPlan(BaseModel):
     theme: str=Field(description="Overall theme or focus for the day. Eg: Exploration, Relaxation, Adventure.")
     time_blocks: List[TimeBlock]
 
+class SearchCriteria(BaseModel):
+    location: str = Field(default="", description="Specific area or location to search in")
+    features: List[str] = Field(default_factory=list, description="List of required features")
+    price_range: str = Field(default="", description="Budget indicator")
+    keywords: str = Field(default="", description="Additional search keywords")
+    category: str = Field(default="", description="Specific category")
+
+class Constraints(BaseModel):
+    pace: str = Field(default="moderate", description="Trip pace: relaxed/moderate/packed")
+    interests: List[str] = Field(default_factory=list, description="List of interests")
+    avoid: List[str] = Field(default_factory=list, description="Things to avoid")
+
+class BudgetInfo(BaseModel):
+    total: float = Field(default=0, description="Total budget")
+    currency: str = Field(default="USD", description="Currency code")
+    trip_type: Literal["budget", "mid-range", "luxury"] = Field(default="mid-range", description="Type of trip")
+
 class SearchTask(BaseModel):
     task_id: str=Field(description="Unique ID of the task. Eg: search_1, search_2...")
-    search_type: Literal["attraction", "restaurant", "hotel", "general_info", "destination_research"]=Field(description="Type of search.")
-    criteria: Dict[str, Any]=Field(description="Dictionary of search parameters specific to the search_type.")
+    search_type: Literal["transportaion or accomodation", "general_info", "destination_research"]=Field(description="Type of search.")
+    criteria: SearchCriteria=Field(description="Search parameters")
     for_day: int=Field(description="The day number in the trip plan this search is for.")
     for_time_block: Literal["Morning", "Afternoon", "Evening"]=Field(description="The time block accociated with this search.")
     priority: Literal["high", "medium", "low"]=Field(description="Priority level of the search task.")
 
-class trip_plan(BaseModel):
-    trip_summary: Optional[str]=Field(None, description="Overview of the trip plan")  
-    daily_structure: List[DayPlan]=Field([], description="The day-wise structure of the trip")
-    search_tasks: List[SearchTask]=Field([], description="Any searches that the orchestrator will need to run about some places or preferences")
-    constraints: Dict[str, Any]=Field({}, description="Rules and preferences to follow while planning")
-    estimated_budget: Optional[dict]=Field(None, description="Budget breakdown if mentioned")
+class TripPlan(BaseModel):
+    trip_summary: str=Field(default="", description="Overview of the trip plan")  
+    daily_structure: List[DayPlan]=Field(default_factory=list, description="The day-wise structure of the trip")
+    search_tasks: List[SearchTask]=Field(default_factory=list, description="Any searches that the orchestrator will need to run about some places or preferences")
+    constraints: Constraints=Field(default_factory=Constraints, description="Rules and preferences to follow while planning")
+    estimated_budget: BudgetInfo=Field(default_factory= BudgetInfo, description="Budget breakdown if mentioned")
 
 class PlannerOutput(BaseModel):
-    need_clarification: bool = Field(False, description="True if the planner needs clarification from the user. False otherwise.")
-    clarification_question: Optional[str] = Field(None, description="The clarification question that the planner needs to ask the user. None, if no clarification is needed.")
-    plan: Optional[trip_plan] = Field(None, description="The travel plan created by the planner. Empty list if clarification is needed.")
+    need_clarification: bool = Field(default=False, description="True if the planner needs clarification from the user. False otherwise.")
+    clarification_question: Optional[str] = Field(default=None, description="The clarification question that the planner needs to ask the user. None, if no clarification is needed.")
+    plan: Optional[TripPlan] = Field(default=None, description="The travel plan created by the planner. Empty list if clarification is needed.")
 
 
