@@ -145,11 +145,11 @@ def search_flights(
         }
 
     normalized_top = [normalize_itinerary(it) for it in top_flights]
-    normalized_other = [normalize_itinerary(it) for it in other_flights]
+    #normalized_other = [normalize_itinerary(it) for it in other_flights]
 
     return {
         "top_itineraries": normalized_top,
-        "other_itineraries": normalized_other,
+        #"other_itineraries": normalized_other,
     }
 
 #@tool
@@ -158,7 +158,7 @@ def flight_search_tool(
     arrival: str,
     outbound_date: str,
     return_date: str = "",
-    travel_class: str = "Economy",
+    travel_class: str = "ECONOMY",
     adults: str = "1",
     children: str = "0",
     infants: str = "0",
@@ -174,10 +174,10 @@ def flight_search_tool(
     arrival_code = get_airport_code(arrival)
     print(departure_code, arrival_code)
 
-    if not departure_code or arrival_code:
-        return {"error": "Could not find airport codes for the provided locations."}
+    # if not departure_code or arrival_code:
+    #     return {"error": "Could not find airport codes for the provided locations."}
     
-    return search_flights(
+    result= search_flights(
         departure_id=departure_code[1],
         arrival_id=arrival_code[1],
         outbound_date=outbound_date,
@@ -192,3 +192,5 @@ def flight_search_tool(
         country_code=country_code,
         search_type=search_type,
     )
+
+    return result
