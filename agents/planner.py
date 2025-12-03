@@ -13,7 +13,7 @@ from agents.utils import get_today_str
 load_dotenv(override=True)
 
 ################Example:
-trip_details = {
+'''trip_details = {
       "destination": "Tokyo",
       "dates": "October 10, 2025",
       "no._of_days": 5,
@@ -21,7 +21,7 @@ trip_details = {
       "budget": "Budget trip",
       "purpose": "sightseeing",
       "preferences": None
-    }
+    }'''
 ################
 
 planner = ChatOpenAI(
