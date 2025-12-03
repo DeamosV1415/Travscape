@@ -21,31 +21,34 @@ def get_today_str() -> str:
 def get_airport_code(location):
   """This function searches the source's and destination's airport ID for a given location using the Booking.com API. The first step when searching for flights."""
 
-  url = "https://booking-com15.p.rapidapi.com/api/v1/flights/searchDestination"
+  url = "https://google-flights2.p.rapidapi.com/api/v1/searchAirport"
 
-  querystring = {"query":location}
+  querystring = {"query":location,"language_code":"en-US","country_code":"US"}
 
   headers = {
     "x-rapidapi-key": os.getenv('x-rapidapi-key'),
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com"
+    "x-rapidapi-host": "google-flights2.p.rapidapi.com"
   }
   try:
     response = httpx.get(url, headers=headers, params=querystring)
     response.raise_for_status()  # Raise an error for bad responses
-    airport_code = response.json().get('data', [])
+    airport_data = response.json().get('data', [])
     
-    if not airport_code:
+    if not airport_data:
         print("No destinations found for this query.")
         airport_details = []
 
-    airport_details = [dest["code"] for dest in airport_code] #Saves all airport IDs for the given location
+    airport_list = airport_data[0]["list"]
+    airport_code = airport_list[0]["id"]
+    #all_airports = [dest["list"] for dest in airport_code] #Saves all airport IDs for the given location
+    #airport_code = [aid["id"] for aid in all_airports[0]] #Takes the first airport ID from the list
   
   except httpx.HTTPStatusError as e:
     print(f"HTTP error occurred: {e.response.status_code} - {e.response.text}")
   except httpx.RequestError as e:
     print(f"Request error occurred: {e}") 
   
-  return airport_details
+  return airport_code
 
 def search_flights(
     departure_id: str,
@@ -152,7 +155,7 @@ def search_flights(
         #"other_itineraries": normalized_other,
     }
 
-#@tool
+@tool
 def flight_search_tool(
     departure: str,
     arrival: str,
@@ -178,8 +181,8 @@ def flight_search_tool(
     #     return {"error": "Could not find airport codes for the provided locations."}
     
     result= search_flights(
-        departure_id=departure_code[1],
-        arrival_id=arrival_code[1],
+        departure_id=departure_code,
+        arrival_id=arrival_code,
         outbound_date=outbound_date,
         return_date=return_date,
         travel_class=travel_class,
@@ -194,3 +197,25 @@ def flight_search_tool(
     )
 
     return result
+
+@tool
+def maps_text_search(query: str):
+  """Tool for maps text search"""
+  url = "https://places.googleapis.com/v1/places:searchText"
+  
+  params = {
+    "textQuery": query
+  }
+
+  headers = {
+    "X-Goog-Api-Key": os.getenv("GOOGLE_API_KEY"),
+    "X-Goog-FieldMask": "places.name,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.priceLevel,places.rating,places.googleMapsUri,places.websiteUri,places.regularOpeningHours,places.googleMapsLinks"
+  }
+
+  response = httpx.post(url, json=params, headers=headers)
+
+  if response.status_code == 200:
+    return response.json()
+  else:
+    print(f"Error {response.status_code}: {response.text}")
+    return None
