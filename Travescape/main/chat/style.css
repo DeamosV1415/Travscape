@@ -1,0 +1,259 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body,html{
+    height: 100%;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
+#main{
+    height: 100%;
+    width: 100%;
+    background-color: rgb(31, 31, 31);
+}
+#main div{
+    display: flex;
+}
+
+.side{
+    position:fixed;
+    height: 100%;
+    width: 9.5vw;
+    background-color: rgb(0, 0, 0);
+    border-right: 2px solid rgba(104, 100, 100, 0.541);
+    display: flex;
+    flex-direction: column;
+}
+
+.side a{
+    color: white;
+    text-decoration: none;
+}
+.side h3{
+    margin-top: 10px;
+    font-weight: 200;
+    color: white;
+}
+#Trav{
+    margin-left: 5px;
+    font-size: 1.5rem;
+}
+#Trav:hover{
+    opacity: 0.4;
+}
+
+#menu{
+    font-size: 2.2rem;
+    align-self: center;
+    cursor: pointer;
+}
+
+#menu:hover{
+    background-color: rgba(133, 133, 133, 0.432);
+    border: 2px solid transparent;
+    border-radius: 40px;
+}
+#btn{
+    height: 4vh;
+    width: 90%;
+    border: 2px solid white;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: 10vh;
+}
+
+#btn:hover{
+    opacity: 0.6;
+    border: 2px solid transparent;
+    background-color: rgba(255, 255, 255, 0.363);
+    color: black;
+}
+
+
+.menu {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(
+        55% 55% at 70% 35%,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(0, 0, 0, 0) 100%
+        ),
+        rgba(255, 255, 255, 0.05);
+
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.5),
+        inset -1px -1px 1px rgba(255, 255, 255, 0.3);
+}
+.menu a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.sector {
+    width: 200px;
+    height: 200px;
+    transform-origin: 0 100%;
+    margin-top: -200px;
+    margin-right: -200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.option {
+    position: absolute;
+    width: 100px;
+    height: 60px;
+    text-align: center;
+    top: calc(50% - 30px);
+    left: calc(50% - 50px);
+    text-decoration: none;
+    font-family: cursive;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    line-height: 20px;
+    z-index: 1;
+}
+.menu a .option span {
+    font-size: 35px;
+}
+.menu a:hover .sector {
+    background: white;
+}
+.menu a:hover .option {
+    color: black;
+}
+
+.menu::before {
+    position: absolute;
+    content:  "\2630";
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    z-index: 1;
+}
+
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.4s ease;
+}
+
+
+.menu-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.menu {
+    transform: scale(0.7);
+    transition: 0.4s ease;
+}
+
+.menu-overlay.show .menu {
+    transform: scale(1);
+}
+
+.s1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    color: white;
+    width: 100%;
+    height: 80%;
+    
+}
+#usrimg{
+    padding: 10px 2px ;
+    font-size: 25px;
+    border: 2px solid;
+    border-radius: 55%;
+    margin-left: 2px;
+    text-align: center;
+}
+
+#name{
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+#p1{
+
+    font-weight:800;
+}
+.s2{
+    width:100%;
+    height: 20%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+}
+#c1{
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+}
+#name{
+    display: flex;
+    flex-direction: column;
+}
+
+#c2{
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+}
+#c2 div{
+    padding-left:4px; 
+    display: flex;
+    gap: 13px;
+}
+
+#c2 p{
+    padding-left:8px ;
+    font-size: 12px;
+}
+.nav{
+    padding: 20px 44px;
+    margin-left:9.5vw;
+    height: 5vh;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    border-bottom:2px solid rgba(104, 100, 100, 0.541) ;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
