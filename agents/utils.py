@@ -3,6 +3,11 @@ import httpx
 import os
 from langchain.tools import tool
 from typing import Optional, Dict, Any
+from agents.tools_arguments_schema import FlightSearchInput, GeneralSearch, MapSearch
+import asyncio, aiohttp
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 #Date and Time
 def get_today_str() -> str:
@@ -17,40 +22,45 @@ def get_today_str() -> str:
             return datetime.now().strftime("%a %b %d, %Y")
 
 
-#Get City Code
-def get_airport_code(location):
-  """This function searches the source's and destination's airport ID for a given location using the Booking.com API. The first step when searching for flights."""
-
-  url = "https://google-flights2.p.rapidapi.com/api/v1/searchAirport"
-
-  querystring = {"query":location,"language_code":"en-US","country_code":"US"}
-
-  headers = {
-    "x-rapidapi-key": os.getenv('x-rapidapi-key'),
-    "x-rapidapi-host": "google-flights2.p.rapidapi.com"
-  }
-  try:
-    response = httpx.get(url, headers=headers, params=querystring)
-    response.raise_for_status()  # Raise an error for bad responses
-    airport_data = response.json().get('data', [])
+#Get City Code (Async Version)
+async def get_airport_code(location):
+    """This function searches the source's and destination's airport ID for a given location using the Booking.com API. The first step when searching for flights."""
     
-    if not airport_data:
-        print("No destinations found for this query.")
-        airport_details = []
+    url = "https://google-flights2.p.rapidapi.com/api/v1/searchAirport"
+    
+    querystring = {"query": location, "language_code": "en-US", "country_code": "US"}
+    
+    headers = {
+        "x-rapidapi-key": os.getenv('x-rapidapi-key'),
+        "x-rapidapi-host": "google-flights2.p.rapidapi.com"
+    }
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers, params=querystring)
+            response.raise_for_status()  # Raise an error for bad responses
+            airport_data = response.json().get('data', [])
+            
+            if not airport_data:
+                print("No destinations found for this query.")
+                return None
+            
+            airport_list = airport_data[0]["list"]
+            airport_code = airport_list[0]["id"]
+            return airport_code
+    
+    except httpx.HTTPStatusError as e:
+        print(f"HTTP error occurred: {e.response.status_code} - {e.response.text}")
+        return None
+    except httpx.RequestError as e:
+        print(f"Request error occurred: {e}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
 
-    airport_list = airport_data[0]["list"]
-    airport_code = airport_list[0]["id"]
-    #all_airports = [dest["list"] for dest in airport_code] #Saves all airport IDs for the given location
-    #airport_code = [aid["id"] for aid in all_airports[0]] #Takes the first airport ID from the list
-  
-  except httpx.HTTPStatusError as e:
-    print(f"HTTP error occurred: {e.response.status_code} - {e.response.text}")
-  except httpx.RequestError as e:
-    print(f"Request error occurred: {e}") 
-  
-  return airport_code
 
-def search_flights(
+async def search_flights(
     departure_id: str,
     arrival_id: str,
     outbound_date: str,
@@ -93,8 +103,9 @@ def search_flights(
     }
 
     try:
-        resp = httpx.get(url, headers=headers, params=query, timeout=15)
-        resp.raise_for_status()
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(url, headers=headers, params=query, timeout=15)
+            resp.raise_for_status()
     except Exception as e:
         return {"error": str(e)}
 
@@ -155,32 +166,40 @@ def search_flights(
         #"other_itineraries": normalized_other,
     }
 
-@tool
-def flight_search_tool(
+
+# @tool(args_schema=FlightSearchInput)
+async def flight_search_tool(
     departure: str,
     arrival: str,
     outbound_date: str,
-    return_date: str = "",
-    travel_class: str = "ECONOMY",
-    adults: str = "1",
-    children: str = "0",
-    infants: str = "0",
+    return_date: str,
+    travel_class: str,
+    adults: str,
+    children: str,
+    infants: str,
+    currency: str,
+    search_type: str,
     show_hidden: str = "1",
-    currency: str = "INR",
     language_code: str = "en-US",
     country_code: str = "IN",
-    search_type: str = "best",
 ) -> Dict[str, Any]:
     
     """Combined tool to search for flights using the provided parameters."""
-    departure_code = get_airport_code(departure)
-    arrival_code = get_airport_code(arrival)
+    
+    # Concurrent airport code lookup - 2x faster!
+    departure_code, arrival_code = await asyncio.gather(
+        get_airport_code(departure),
+        get_airport_code(arrival)
+    )
+    
     print(departure_code, arrival_code)
 
-    # if not departure_code or arrival_code:
-    #     return {"error": "Could not find airport codes for the provided locations."}
+    # Validate we got both codes
+    if not departure_code or not arrival_code:
+        return {"error": "Could not find airport codes for the provided locations."}
     
-    result= search_flights(
+    # Search flights with the obtained codes
+    result = await search_flights(
         departure_id=departure_code,
         arrival_id=arrival_code,
         outbound_date=outbound_date,
@@ -198,24 +217,107 @@ def flight_search_tool(
 
     return result
 
-@tool
-def maps_text_search(query: str):
-  """Tool for maps text search"""
-  url = "https://places.googleapis.com/v1/places:searchText"
-  
-  params = {
-    "textQuery": query
-  }
+@tool(args_schema=MapSearch)
+async def maps_text_search(queries: list[str] | str):
+    """Tool for maps text search. Accepts a single query string or a list of queries."""
+    
+    # Handle both single query and list of queries
+    if isinstance(queries, str):
+        queries = [queries]
+    
+    async def _search_single_query(session: aiohttp.ClientSession, query: str):
+        """Helper function to search a single query"""
+        url = "https://places.googleapis.com/v1/places:searchText"
+        
+        params = {"textQuery": query}
+        
+        headers = {
+            "X-Goog-Api-Key": os.getenv("GOOGLE_API_KEY"),
+            "X-Goog-FieldMask": "places.name,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.priceLevel,places.rating,places.googleMapsUri,places.websiteUri,places.regularOpeningHours,places.googleMapsLinks"
+        }
+        
+        try:
+            async with session.post(url, json=params, headers=headers) as response:
+                if response.status == 200:
+                    return {
+                        "query": query,
+                        "success": True,
+                        "data": await response.json()
+                    }
+                else:
+                    text = await response.text()
+                    print(f"Error {response.status} for query '{query}': {text}")
+                    return {
+                        "query": query,
+                        "success": False,
+                        "error": f"Status {response.status}: {text}"
+                    }
+        except Exception as e:
+            print(f"Exception for query '{query}': {str(e)}")
+            return {
+                "query": query,
+                "success": False,
+                "error": str(e)
+            }
+    
+    # Use a single session for all requests (more efficient)
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(*[_search_single_query(session, query) for query in queries], return_exceptions=True)
+    
+    # Return single result or list based on input
+    return results[0] if len(results) == 1 else results
 
-  headers = {
-    "X-Goog-Api-Key": os.getenv("GOOGLE_API_KEY"),
-    "X-Goog-FieldMask": "places.name,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.priceLevel,places.rating,places.googleMapsUri,places.websiteUri,places.regularOpeningHours,places.googleMapsLinks"
-  }
+@tool(args_schema=GeneralSearch)
+async def general_search(queries: list[str] | str):
+    """Tool for general web search. Accepts a single query string or a list of queries."""
 
-  response = httpx.post(url, json=params, headers=headers)
-
-  if response.status_code == 200:
-    return response.json()
-  else:
-    print(f"Error {response.status_code}: {response.text}")
-    return None
+    if isinstance(queries, str):
+        queries = [queries]
+    
+    async def _search_single_query(session: aiohttp.ClientSession, query: str):
+        """Helper function to search a single query using Tavily API"""
+        url = "https://api.tavily.com/search"
+        
+        payload = {
+            "api_key": os.getenv("TAVILY_API_KEY"),
+            "query": query,
+            "max_results": 10,
+            "topic": "general",
+            "include_answer": True,
+            "include_raw_content": False,
+            "include_images": False
+        }
+        
+        try:
+            async with session.post(url, json=payload) as response:
+                if response.status == 200:
+                    return {
+                        "query": query,
+                        "success": True,
+                        "data": await response.json()
+                    }
+                else:
+                    text = await response.text()
+                    print(f"Error {response.status} for query '{query}': {text}")
+                    return {
+                        "query": query,
+                        "success": False,
+                        "error": f"Status {response.status}: {text}"
+                    }
+        except Exception as e:
+            print(f"Exception for query '{query}': {str(e)}")
+            return {
+                "query": query,
+                "success": False,
+                "error": str(e)
+            }
+    
+    # Use a single session for all requests (more efficient)
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(
+            *[_search_single_query(session, query) for query in queries],
+            return_exceptions=False
+        )
+    
+    # Return single result or list based on input
+    return results[0] if len(results) == 1 else results
