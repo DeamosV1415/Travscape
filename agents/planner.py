@@ -12,35 +12,25 @@ from agents.utils import get_today_str
 
 load_dotenv(override=True)
 
-################Example:
-'''trip_details = {
-      "destination": "Tokyo",
-      "dates": "October 10, 2025",
-      "no._of_days": 5,
-      "travelers": 3,
-      "budget": "Budget trip",
-      "purpose": "sightseeing",
-      "preferences": None
-    }'''
-################
+async def planner_node(state:AgentState) -> AgentState:
 
-planner = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2
-)
+    planner = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2
+    )
 
-planner_with_output = planner.with_structured_output(PlannerOutput)
+    planner_with_output = planner.with_structured_output(PlannerOutput)
 
-#System message initialization with today's date
-system_message = planner_message.format(
-  date=get_today_str(),
-  trip_details=trip_details
-)
-
-def Planner_node(state:AgentState) -> AgentState:
+    trip_details = state["user_request"]
+    
+    #System message initialization with today's date
+    system_message = planner_message.format(
+        date=get_today_str(),
+        trip_details=trip_details
+    )
 
     found_system_message = False
     messages = state["messages"]
@@ -53,9 +43,9 @@ def Planner_node(state:AgentState) -> AgentState:
         messages = [SystemMessage(content=system_message)] + messages
 
     try:
-        response = planner_with_output.invoke(messages)
+        response = await planner_with_output.ainvoke(messages)
 
-        if response.need_clarification and response.clarification_question is not None:
+        if response.needs_clarification and response.clarification_question is not None:
           ai_response = AIMessage(content=response.clarification_question)
           updated_messages = messages + [ai_response]
 
@@ -70,10 +60,15 @@ def Planner_node(state:AgentState) -> AgentState:
             ai_response = AIMessage(content=f"Plan generated: {plan_dict}")
             updated_messages = messages + [ai_response]
 
+            # Extract task IDs from search_tasks
+            search_tasks = plan_dict.get("search_tasks", [])
+            pending_task_ids = [task["task_id"] for task in search_tasks]
+
             return Command(
                 update={
                     "messages": updated_messages,
-                    "trip_plan": [plan_dict]
+                    "trip_plan": plan_dict,
+                    "pending_tasks": pending_task_ids
                 }
             )
 
@@ -84,14 +79,14 @@ def Planner_node(state:AgentState) -> AgentState:
             update={"messages": messages + [error_message]}
         )
 
-checkpointer = InMemorySaver()
+# checkpointer = InMemorySaver()
 
-planner_builder = StateGraph(AgentState)
+# planner_builder = StateGraph(AgentState)
 
-planner_builder.add_node("Planner", Planner_node)
+# planner_builder.add_node("Planner", planner_node)
 
-planner_builder.add_edge(START, "Planner")
-planner_builder.add_edge("Planner", END)
+# planner_builder.add_edge(START, "Planner")
+# planner_builder.add_edge("Planner", END)
 
-graph = planner_builder.compile(checkpointer=checkpointer)
+# graph = planner_builder.compile(checkpointer=checkpointer)
 

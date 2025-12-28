@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Literal
 
 class FlightSearchInput(BaseModel):
@@ -16,8 +16,8 @@ class FlightSearchInput(BaseModel):
 
 class GeneralSearch(BaseModel):
     """"Input for the general search tool"""
-    query: str = Field(default="", description="Search query")
+    queries: list[str] = Field(default_factory=list, description="Search query")
 
 class MapSearch(BaseModel):
     """Input for the map search tool"""
-    query: str = Field(default="", description="Map Text Search query")
+    queries: list[str] = Field(default_factory=list, description="Map Text Search query")
