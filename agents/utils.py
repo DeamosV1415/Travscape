@@ -5,6 +5,7 @@ from langchain.tools import tool
 from typing import Optional, Dict, Any
 from agents.tools_arguments_schema import FlightSearchInput, GeneralSearch, MapSearch
 import asyncio, aiohttp
+from langchain.tools import tool
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -167,18 +168,18 @@ async def search_flights(
     }
 
 
-# @tool(args_schema=FlightSearchInput)
+@tool(args_schema=FlightSearchInput)
 async def flight_search_tool(
     departure: str,
     arrival: str,
     outbound_date: str,
-    return_date: str,
-    travel_class: str,
-    adults: str,
-    children: str,
-    infants: str,
-    currency: str,
-    search_type: str,
+    return_date: str = "",           
+    travel_class: str = "ECONOMY",   
+    adults: str = "1",               
+    children: str = "0",             
+    infants: str = "0",              
+    currency: str = "INR",           
+    search_type: str = "best",       
     show_hidden: str = "1",
     language_code: str = "en-US",
     country_code: str = "IN",

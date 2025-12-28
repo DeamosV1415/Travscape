@@ -11,76 +11,77 @@ from agents.prompts import chatbot_message
 
 load_dotenv(override=True)
 
-chatbot = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2
-)
+async def chatbot_node(state: AgentState) -> AgentState:
 
-chatbot_with_output = chatbot.with_structured_output(chatbot_output)
+    chatbot = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2,
+    )
 
-#System message initialization with today's date
-system_message = chatbot_message.format(
-    date=get_today_str()
-)
+    chatbot_with_output = chatbot.with_structured_output(chatbot_output)
 
-def Chatbot_node(state: AgentState) -> AgentState:
+    #System message initialization with today's date
+    system_message = chatbot_message.format(
+        date=get_today_str()
+    )
 
-  found_system_message = False
-  messages = state["messages"]
-  for message in messages:
-      if isinstance(message, SystemMessage):
-          message.content = system_message
-          found_system_message = True
+    found_system_message = False
+    messages = state["messages"]
+    for message in messages:
+        if isinstance(message, SystemMessage):
+            message.content = system_message
+            found_system_message = True
 
-  if not found_system_message:
-      messages = [SystemMessage(content=system_message)] + messages
+    if not found_system_message:
+        messages = [SystemMessage(content=system_message)] + messages
 
-  try:
-    response = chatbot_with_output.invoke(messages)
+    try:
+        response = await chatbot_with_output.ainvoke(messages)
 
-    # Create the main response message
-    ai_response = AIMessage(content=response.chatbot_reply)
-    updated_messages = messages + [ai_response]
-
-    # Only append clarification question if it exists and has meaningful content
-    if (response.need_clarification and 
-        response.clarification_question and 
-        response.clarification_question.strip() and
-        response.clarification_question.lower() not in ["none", "null"] and
-        "none, if no clarification is needed" not in response.clarification_question.lower()):
-
-        # Combine the reply and clarification question in a single message
-        combined_content = f"{response.chatbot_reply}\n\n{response.clarification_question}"
-        ai_response = AIMessage(content=combined_content)
+        # Create the main response message
+        ai_response = AIMessage(content=response.chatbot_reply)
         updated_messages = messages + [ai_response]
 
-    trip_requests = [req.model_dump() for req in response.user_request] if response.user_request else []
+        # Only append clarification question if it exists and has meaningful content
+        if (response.needs_clarification and 
+            response.clarification_question and 
+            response.clarification_question.strip() and
+            response.clarification_question.lower() not in ["none", "null"] and
+            "none, if no clarification is needed" not in response.clarification_question.lower()):
 
-    return Command(
-        update={
-            "messages": updated_messages,
-            "need_clarification": response.need_clarification,
-            "user_request": trip_requests
-        }
-    )
+            # Combine the reply and clarification question in a single message
+            combined_content = f"{response.chatbot_reply}\n\n{response.clarification_question}"
+            ai_response = AIMessage(content=combined_content)
+            updated_messages = messages + [ai_response]
 
-  except Exception as e:
-    print(f"Error: {e}")
-    error_message = AIMessage(content="Sorry, I encountered an error. Please try again.")
-    return Command(
-        update={"messages": messages + [error_message]}
-    )
+        trip_requests = [req.model_dump() for req in response.user_request] if response.user_request else []
 
-checkpointer = InMemorySaver()
+        return Command(
+            update={
+                "messages": updated_messages,
+                "needs_clarification": response.needs_clarification,
+                "user_request": trip_requests,
+                "need_trip_plan": response.need_trip_plan
+            }
+        )
 
-chatbot_builder = StateGraph(AgentState)
+    except Exception as e:
+        print(f"Error: {e}")
+        error_message = AIMessage(content="Sorry, I encountered an error. Please try again.")
+        return Command(
+            update={"messages": messages + [error_message]}
+        )
 
-chatbot_builder.add_node("Chatbot", Chatbot_node)
+# checkpointer = InMemorySaver()
 
-chatbot_builder.add_edge(START, "Chatbot")
-chatbot_builder.add_edge("Chatbot", END)
+# chatbot_builder = StateGraph(AgentState)
 
-graph = chatbot_builder.compile(checkpointer=checkpointer)
+# chatbot_builder.add_node("Chatbot", chatbot_node)
+
+# chatbot_builder.add_edge(START, "Chatbot")
+# chatbot_builder.add_edge("Chatbot", END)
+
+# graph = chatbot_builder.compile(checkpointer=checkpointer)

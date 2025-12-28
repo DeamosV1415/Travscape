@@ -33,8 +33,8 @@ class BudgetInfo(BaseModel):
     trip_type: Literal["budget", "mid-range", "luxury"] = Field(default="mid-range", description="Type of trip")
 
 class SearchTask(BaseModel):
-    task_id: str=Field(description="Unique ID of the task. Eg: search_1, search_2...")
-    search_type: Literal["transportaion or accomodation", "general_info", "destination_research"]=Field(description="Type of search.")
+    task_id: str=Field(description="Unique ID of the task. Eg: flight_search_1, hotel_search_1, flight_search_2, general_search_1, maps_text_search_1...")
+    search_type: Literal["transportation", "accomodation", "general_info", "destination_research"]=Field(description="Type of search.")
     criteria: SearchCriteria=Field(description="Search parameters")
     for_day: int=Field(description="The day number in the trip plan this search is for.")
     for_time_block: Literal["Morning", "Afternoon", "Evening"]=Field(description="The time block accociated with this search.")
@@ -48,8 +48,6 @@ class TripPlan(BaseModel):
     estimated_budget: BudgetInfo=Field(default_factory= BudgetInfo, description="Budget breakdown if mentioned")
 
 class PlannerOutput(BaseModel):
-    need_clarification: bool = Field(default=False, description="True if the planner needs clarification from the user. False otherwise.")
+    needs_clarification: bool = Field(default=False, description="True if the planner needs clarification from the user. False otherwise.")
     clarification_question: Optional[str] = Field(default=None, description="The clarification question that the planner needs to ask the user. None, if no clarification is needed.")
     plan: Optional[TripPlan] = Field(default=None, description="The travel plan created by the planner. Empty list if clarification is needed.")
-
-
