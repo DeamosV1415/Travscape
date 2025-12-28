@@ -1,3 +1,27 @@
+/* ===============================
+   CUSTOM FONTS
+================================ */
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../fonts/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../fonts/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+}
+
 * {
     padding: 0px;
     margin: 0px;
@@ -305,7 +329,7 @@ body::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
 }
- 
+
 /* ===============================
    NEWS SECTION
 ================================ */
@@ -317,21 +341,20 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: rgb(4, 4, 4);
     padding: 20px 40px;
     color: white;
-    display:flex;
+    display: flex;
     flex-direction: column;
     gap: 1rem;
 }
+
 .news::before {
     content: "";
     display: block;
     width: 100%;
     height: 1px;
-    background: linear-gradient(
-        to right,
-        transparent,
-        rgba(255,255,255,0.15),
-        transparent
-    );
+    background: linear-gradient(to right,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent);
     margin-bottom: 18px;
 }
 

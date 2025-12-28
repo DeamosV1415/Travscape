@@ -1,3 +1,27 @@
+/* ===============================
+   CUSTOM FONTS
+================================ */
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../../fonts/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url('../../fonts/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('../../fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+}
+
 * {
     padding: 0px;
     margin: 0px;
@@ -314,6 +338,7 @@ body::-webkit-scrollbar-thumb:hover {
     display: flex;
     flex-direction: column;
 }
+
 /* ===============================
    MODERN CHAT INPUT (GPT STYLE)
 ================================ */
@@ -321,11 +346,9 @@ body::-webkit-scrollbar-thumb:hover {
 .chat-input-wrapper {
     padding: 18px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.9),
-        rgba(0, 0, 0, 0.6)
-    );
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.6));
 }
 
 .chat-input {
@@ -341,7 +364,7 @@ body::-webkit-scrollbar-thumb:hover {
     box-shadow:
         inset 0 0 8px rgba(255, 255, 255, 0.08),
         0 0 20px rgba(0, 0, 0, 0.8);
-    width: min(1400px, 96%);    
+    width: min(1400px, 96%);
 }
 
 .chat-input textarea {
@@ -387,16 +410,18 @@ body::-webkit-scrollbar-thumb:hover {
 .chat-input textarea::-webkit-scrollbar {
     width: 6px;
 }
+
 .chat-input textarea::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
 }
 
-.welcome{
+.welcome {
     width: 100%;
     height: 100%;
     color: white;
 }
+
 /* ===============================
    WELCOME COMPASS ANIMATION
 ================================ */
@@ -439,11 +464,9 @@ body::-webkit-scrollbar-thumb:hover {
     left: 50%;
     width: 2px;
     height: 32px;
-    background: linear-gradient(
-        to top,
-        rgba(255, 255, 255, 0.2),
-        white
-    );
+    background: linear-gradient(to top,
+            rgba(255, 255, 255, 0.2),
+            white);
     transform-origin: bottom center;
     transform: translate(-50%, -100%) rotate(0deg);
     border-radius: 2px;
@@ -466,8 +489,19 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Animation */
 @keyframes compassRotate {
-    0%   { transform: translate(-50%, -100%) rotate(-25deg); }
-    40%  { transform: translate(-50%, -100%) rotate(30deg); }
-    70%  { transform: translate(-50%, -100%) rotate(-15deg); }
-    100% { transform: translate(-50%, -100%) rotate(-25deg); }
+    0% {
+        transform: translate(-50%, -100%) rotate(-25deg);
+    }
+
+    40% {
+        transform: translate(-50%, -100%) rotate(30deg);
+    }
+
+    70% {
+        transform: translate(-50%, -100%) rotate(-15deg);
+    }
+
+    100% {
+        transform: translate(-50%, -100%) rotate(-25deg);
+    }
 }
