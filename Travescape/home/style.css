@@ -52,14 +52,12 @@
     box-sizing: border-box;
 }
 
-
-html,
-body {
+html,body {
     height: 100%;
     width: 100%;
     background: linear-gradient(180deg, #132440, #16476A, #3B9797);
 }
-a {
+a{
     text-decoration: none;
     color: white;
 }
@@ -96,8 +94,14 @@ a {
 #nav1 a:hover{
     color: #16476A;
     transition: all 0.3s ease-in-out;
-    transform: translateY(-2px);
+    transform: translateY(-5px);
 }
+#nav1 h1:hover{
+    color: #16476A;
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+}
+
 
 #nav1 h2:hover{
     color: #16476A;
@@ -109,20 +113,26 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 25px;
     font-family: 'DM Sans';
     font-size: 1rem;
+}
+#nav2 h4{
+   
+    padding-bottom: 5px;
 }
 
 #nav2 h4:hover{
     color: #16476A;
     transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+    border-bottom: 1.3px solid rgba(255, 255, 255, 0.125);
 }
 
 #log-btn{
     cursor: pointer;
-    border: 0.7px solid rgba(255, 255, 255, 0.125); 
-    border-radius: 50%; 
-    padding: 4px 7px;
+    color: white;
 }
+
+
 
