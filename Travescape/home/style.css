@@ -606,7 +606,7 @@ a {
     border-radius: 20px;
     flex-direction: column;
     gap: 20px;
-    animation: scrollY 65s linear infinite;
+    animation: scrollY 95s linear infinite;
 }
 
 /* image styling */
