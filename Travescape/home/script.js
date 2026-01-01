@@ -1,6 +1,12 @@
 var body = document.querySelector("body");
 var login = document.querySelector("#log-btn");
 var logincard = document.querySelector("#logincard");
+var img_arr=[
+    {img:"/Travescape/home/imgs/img1/1.avif"},{img:"/Travescape/home/imgs/img1/2.avif"},
+    {img:"/Travescape/home/imgs/img1/3.avif"},{img:"/Travescape/home/imgs/img1/4.avif"},
+    {img:"/Travescape/home/imgs/img1/5.avif"},{img:"/Travescape/home/imgs/img1/6.avif"},
+    {img:"/Travescape/home/imgs/img1/7.avif"},{img:"/Travescape/home/imgs/img1/8.avif"}
+]
 
 
 function openOverlay(target) {
@@ -71,3 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+let clutter = "";
+
+img_arr.forEach(i => {
+  clutter += `<img class="photo" src="${i.img}" alt="">`;
+});
+
+document.querySelector(".trip-photo").innerHTML = clutter + clutter;
