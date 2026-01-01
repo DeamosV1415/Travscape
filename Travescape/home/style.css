@@ -21,26 +21,30 @@
     font-weight: 300 700;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'Space Grotesk';
     src: url('../fonts/SpaceGrotesk-Italic-VariableFont_wght.ttf') format('truetype');
     font-weight: 300 700;
     font-style: italic;
 }
-@font-face{
+
+@font-face {
     font-family: 'FugazOne';
     src: url('../fonts/FugazOne-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
-@font-face{
+
+@font-face {
     font-family: 'Poppins';
     src: url('../fonts/Poppins-VariableFont_wght.ttf') format('truetype');
     font-weight: 100 900;
     font-style: normal;
 }
+
 @font-face {
-    font-family:'Archivo';
+    font-family: 'Archivo';
     src: url('../fonts/ArchivoBlack-Regular.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
@@ -52,16 +56,28 @@
     box-sizing: border-box;
 }
 
-html,body {
+html,
+body {
     height: 100%;
     width: 100%;
     background: linear-gradient(180deg, #132440, #16476A, #3B9797);
 }
-a{
+
+html,body::-webkit-scrollbar {
+    background-color: #226a9d;
+}
+
+html,body::-webkit-scrollbar-thumb {
+    background-color: #7abeee;
+    border-radius: 20px;
+}
+
+a {
     text-decoration: none;
     color: white;
 }
-.nav{
+
+.nav {
     height: 14vh;
     display: flex;
     width: 100%;
@@ -70,47 +86,50 @@ a{
     padding: 30px 60px;
     border-bottom: 0.7px solid rgba(255, 255, 255, 0.125);
 }
-#nav1{
+
+#nav1 {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    
+
 }
-#nav1 h1{
+
+#nav1 h1 {
     font-size: 3rem;
     font-family: 'DM Sans';
     font-weight: 400;
 }
 
-#nav1 h2{
-    font-size: 2rem; 
-    color:white;
+#nav1 h2 {
+    font-size: 2rem;
+    color: white;
     cursor: pointer;
-    border: 0.7px solid rgba(255, 255, 255, 0.125); 
-    border-radius: 50%; 
+    border: 0.7px solid rgba(255, 255, 255, 0.125);
+    border-radius: 50%;
     padding: 4px 7px;
 }
 
-#nav1 a:hover{
-    color: #226a9d;
-    transition: all 0.3s ease-in-out;
-    transform: translateY(-5px);
-}
-#nav1 h1:hover{
+#nav1 a:hover {
     color: #226a9d;
     transition: all 0.3s ease-in-out;
     transform: translateY(-5px);
 }
 
-
-#nav1 h2:hover{
+#nav1 h1:hover {
     color: #226a9d;
     transition: all 0.3s ease-in-out;
-    transform: rotate(90deg); 
+    transform: translateY(-5px);
 }
 
-#nav2{
+
+#nav1 h2:hover {
+    color: #226a9d;
+    transition: all 0.3s ease-in-out;
+    transform: rotate(90deg);
+}
+
+#nav2 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -119,19 +138,20 @@ a{
     font-size: 1rem;
     font-weight: 200;
 }
-#nav2 h4{
-   
+
+#nav2 h4 {
+
     padding-bottom: 5px;
 }
 
-#nav2 h4:hover{
+#nav2 h4:hover {
     color: #226a9d;
     transition: all 0.5s ease-in-out;
     transform: translateY(-5px);
     border-bottom: 1.3px solid rgba(255, 255, 255, 0.125);
 }
 
-#log-btn{
+#log-btn {
     cursor: pointer;
     color: white;
 }
@@ -170,7 +190,7 @@ a{
 }
 
 
-#c2{
+#c2 {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     height: 65%;
@@ -184,21 +204,23 @@ a{
     background-position: center;
 }
 
-#c2 h2{
+#c2 h2 {
     font-size: 1.8rem;
     font-family: 'DM Sans';
     font-weight: 700;
     color: white;
     text-shadow: 0 0 10px rgba(78, 78, 214, 0.896);
 }
-#loginform{
+
+#loginform {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 16px;
 }
-#input{
+
+#input {
     height: 22px;
     width: 200px;
     padding: 10px;
@@ -211,24 +233,25 @@ a{
     cursor: pointer;
 }
 
-#lgbtn{
+#lgbtn {
     height: 24px;
     width: 200px;
     border: 1px solid rgba(38, 0, 255, 0.122);
     border-radius: 10px;
     text-align: center;
     font-family: 'DM Sans';
-    background-color:rgb(165, 214, 237);
+    background-color: rgb(165, 214, 237);
     color: rgb(73, 72, 72);
     cursor: pointer;
 }
 
-#lgbtn:hover{
+#lgbtn:hover {
     transition: all 0.3s ease-in-out;
     transform: translateY(-5px);
     box-shadow: 4px 4px 12px rgba(79, 183, 243, 0.956);
 }
-#c3{
+
+#c3 {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     height: 35%;
@@ -238,6 +261,7 @@ a{
     gap: 35px;
     background-color: #6486bd;
 }
+
 #gl {
     margin-top: 15px;
     width: 65%;
@@ -257,14 +281,16 @@ a{
     height: 22px;
 }
 
-#c3 h4{
+#c3 h4 {
     font-family: 'DM Sans';
     font-size: 1rem;
 }
-#c3 h4 span{
+
+#c3 h4 span {
     color: #16476A;
 }
-#c3 h4:hover{
+
+#c3 h4:hover {
     transition: all 0.3s ease-in-out;
     transform: translateY(-5px);
     text-shadow: 0px 0px 10px rgba(251, 251, 255, 0.666);
@@ -378,4 +404,90 @@ a{
 
 .menu-overlay.show .menu {
     transform: scale(1);
+}
+
+#main {
+    height: 200vh;
+    width: 100%;
+}
+
+#hero {
+    margin-top: 1px;
+    height: 55%;
+    width: 100%;
+    background-image: url("/Travescape/home/imgs/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+#hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#hero-text h1 {
+    font-size: 9rem;
+    font-family: 'DM Sans';
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 0 10px rgba(190, 37, 241, 0.477);
+}
+
+#hero-text h1:hover {
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+    text-shadow: 4px 4px 12px rgba(190, 37, 241, 0.477);
+}
+
+#hero-text p {
+    font-size: 3rem;
+    font-family: 'DM Sans';
+    font-weight: 200;
+    color: white;
+    text-shadow: 0 0 10px rgba(78, 78, 214, 0.896);
+}
+#hero-text p:hover {
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.834);
+}
+
+#hero-text p span {
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+
+#hero-text p span:hover {
+    transform: rotate(90deg);
+}
+
+#hero-btn button {
+    width: 380px;
+    height: 50px;
+    text-align: center;
+    font-family: 'DM Sans';
+    background-color: rgb(45, 116, 221);
+    border: 1.6px solid rgba(33, 60, 129, 0.762);
+    color: white;
+    cursor: pointer;
+    font-size: 1.4rem;
+    border-top-left-radius: none;
+    border-bottom-right-radius: none;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#hero-btn button:hover {
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+    box-shadow: 4px 4px 12px rgba(119, 205, 255, 0.856);
 }
