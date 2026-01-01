@@ -62,6 +62,9 @@ body {
     width: 100%;
     background: linear-gradient(180deg, #132440, #16476A, #3B9797);
 }
+html,body{
+    min-height: 300vh;
+}
 
 html,body::-webkit-scrollbar {
     background-color: #226a9d;
@@ -490,4 +493,76 @@ a {
     transition: all 0.3s ease-in-out;
     transform: translateY(-5px);
     box-shadow: 4px 4px 12px rgba(119, 205, 255, 0.856);
+}
+
+#body{
+    height: 75%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 2px white solid;
+    padding: 8px;
+}
+
+#chatbot{
+    height: 45%;
+    width: 100%;
+    border: 2px rgba(202, 179, 179, 0.199) solid;
+}
+#trips{
+    height: 85%;
+    width: 100%;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+}
+#text{
+    padding: 11px 12px;
+    height: 95%;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+#text h1{
+    padding: 5px 6px;
+    font-size: 12rem;
+    font-family: 'DM Sans';
+    font-weight: 700;
+    color: white;
+}
+#trips-icon{
+    opacity: 0;
+}
+#text:hover #trips-icon{
+    transition: all 0.6s ease-in-out;
+    opacity: 1;
+}
+#text p{
+    padding: 5px 6px;
+    font-size: 2rem;
+    font-family: 'DM Sans';
+    font-weight: 200;
+    color: white;
+    margin-left: 20px;       
+}
+
+#text p:hover{
+    transition: all 0.3s ease-in-out;
+    transform: translateY(-5px);
+  color: #5ae5e5;
+}
+#img-sec{
+    height: 95%;
+    width: 45%;
+    border: 2px rgba(255, 255, 255, 0.84) solid;
+    
 }
