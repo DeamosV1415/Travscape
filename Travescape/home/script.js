@@ -5,7 +5,11 @@ var img_arr=[
     {img:"/Travescape/home/imgs/img1/1.avif"},{img:"/Travescape/home/imgs/img1/2.avif"},
     {img:"/Travescape/home/imgs/img1/3.avif"},{img:"/Travescape/home/imgs/img1/4.avif"},
     {img:"/Travescape/home/imgs/img1/5.avif"},{img:"/Travescape/home/imgs/img1/6.avif"},
-    {img:"/Travescape/home/imgs/img1/7.avif"},{img:"/Travescape/home/imgs/img1/8.avif"}
+    {img:"/Travescape/home/imgs/img1/7.avif"},{img:"/Travescape/home/imgs/img1/8.avif"},
+    {img:"/Travescape/home/imgs/img1/9.avif"},{img:"/Travescape/home/imgs/img1/10.avif"},
+    {img:"/Travescape/home/imgs/img1/11.avif"},{img:"/Travescape/home/imgs/img1/12.avif"},
+    {img:"/Travescape/home/imgs/img1/13.avif"},{img:"/Travescape/home/imgs/img1/14.avif"}
+
 ]
 
 
