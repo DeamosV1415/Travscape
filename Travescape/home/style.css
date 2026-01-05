@@ -624,6 +624,8 @@ a {
 }
 
 #chatbot {
+    margin-top:120px;
+    height: 25%;
     width: 100%;
     display: flex;
     gap: 20px;
@@ -632,6 +634,7 @@ a {
 
 /* Card style */
 .card {
+    margin-top: 30px;
     height: 250px;
     width: 350px;
     border-radius: 20px;
@@ -643,8 +646,8 @@ a {
     display: flex;
     flex-direction: column;
     gap: 10px;
-
+    background-color: #2298ec9d;
     /* SHADOW */
     box-shadow: 
-        0 20px 40px rgba(20, 44, 147, 0.312);
+        0 12px 20px rgba(70, 96, 208, 0.716);
 }
