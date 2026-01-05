@@ -623,33 +623,64 @@ a {
 }
 
 #chatbot {
-    margin-top:120px;
-    height: 25%;
+    margin-top: 120px;
     width: 100%;
+    min-height: 300px;
+    border-radius: 10px;
+
     display: flex;
     gap: 20px;
-    padding: 20px;
+    align-items: center;
+    justify-content: center;
+
     background-image: url(/Travescape/home/imgs/12.jpg);
     background-size: cover;
     background-position: center;
-    border-radius: 20px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background overlay */
+#chatbot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.033); /* adjust darkness */
+    z-index: 0;
 }
 
 /* Card style */
 .card {
-    margin-top: 15px;
+    position: relative;
+    z-index: 1;
+
     height: 200px;
     width: 350px;
-    border-radius: 20px;
-    padding: 10px 12px;
-    font-family: 'DM Sans';
-    font-weight: 200;
-    color: white;
+    padding: 12px 14px;
+
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
     font-size: 1rem;
+    color: #000;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #2298ec9d;
+
+    border-radius: 20px;
+
+    /* Card shadow */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+.card {
+    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.133);
+}
+
+
+.card a{
+    color: black;
 }
 
 .footer {
