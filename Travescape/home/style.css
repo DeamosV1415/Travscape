@@ -629,6 +629,10 @@ a {
     display: flex;
     gap: 20px;
     padding: 20px;
+    background-image: url(/Travescape/home/imgs/12.jpg);
+    background-size: contain;
+    background-position: center;
+    border-radius: 20px;
 }
 
 /* Card style */
