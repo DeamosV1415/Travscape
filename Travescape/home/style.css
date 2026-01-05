@@ -65,7 +65,7 @@ body {
 
 html,
 body {
-    min-height: 400vh;
+    min-height: 300vh;
 }
 
 html,
@@ -520,12 +520,6 @@ a {
     padding: 8px;
 }
 
-#chatbot {
-    height: 45%;
-    width: 100%;
-    border: 2px rgba(202, 179, 179, 0.199) solid;
-}
-
 #trips {
     height: 65%;
     width: 100%;
@@ -627,4 +621,30 @@ a {
     to {
         transform: translateY(-50%);
     }
+}
+
+#chatbot {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Card style */
+.card {
+    height: 250px;
+    width: 350px;
+    border-radius: 20px;
+    padding: 10px 12px;
+    font-family: 'DM Sans';
+    font-weight: 200;
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    /* SHADOW */
+    box-shadow: 
+        0 20px 40px rgba(20, 44, 147, 0.312);
 }
