@@ -58,7 +58,6 @@
 
 html,
 body {
-    height: 100%;
     width: 100%;
     background: linear-gradient(180deg, #132440, #16476A, #3B9797);
 }
@@ -68,15 +67,15 @@ body {
     min-height: 300vh;
 }
 
-html,
 body::-webkit-scrollbar {
     background-color: #226a9d;
+    display: block;
 }
 
-html,
 body::-webkit-scrollbar-thumb {
     background-color: #7abeee;
     border-radius: 20px;
+    display: block;
 }
 
 a {
@@ -645,7 +644,9 @@ a {
         rgba(94, 175, 221, 0.45)
     );
 }
-
+#chatbot .card{
+    opacity: 1
+}
 /* Card style */
 .card {
     position: relative;
@@ -679,7 +680,7 @@ a {
 
 .card p{
     font-size: 1rem;
-    color: #406db6ef;
+    color: rgba(64, 109, 182, 0.95);
 }
 .card:hover{
     transition: all 0.5s ease-in-out;
@@ -707,3 +708,4 @@ a {
     font-weight: 200;
     font-size: 1rem;
 }
+
