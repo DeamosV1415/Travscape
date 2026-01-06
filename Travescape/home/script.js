@@ -88,3 +88,35 @@ img_arr.forEach(i => {
 });
 
 document.querySelector(".trip-photo").innerHTML = clutter + clutter;
+function enableCardScroll() {
+
+  const cards = document.querySelectorAll("#chatbot .card");
+
+  cards.forEach(card => {
+
+    /* --- touch swipe scrolling --- */
+    let startY = 0;
+    let scrollTop = 0;
+
+    card.addEventListener("touchstart", e => {
+      startY = e.touches[0].pageY;
+      scrollTop = card.scrollTop;
+    });
+
+    card.addEventListener("touchmove", e => {
+      const y = e.touches[0].pageY;
+      const walk = startY - y;
+      card.scrollTop = scrollTop + walk;
+    });
+
+    /* --- mouse wheel support --- */
+    card.addEventListener("wheel", e => {
+      card.scrollTop += e.deltaY;
+      e.preventDefault();
+    });
+
+  });
+
+}
+
+document.addEventListener("DOMContentLoaded", enableCardScroll);
