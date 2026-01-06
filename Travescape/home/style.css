@@ -424,7 +424,6 @@ a {
     background-image: url("/Travescape/home/imgs/bg.jpg");
     background-size: cover;
     background-position: center;
-    border-radius: 10px;
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
@@ -712,58 +711,135 @@ a {
 @media(max-width:768px){
 
 /* Main navbar stack */
-.nav{
-    padding:12px 16px;
-    height:auto;
-    gap:10px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-}
+    .nav{
+        padding:12px 16px;
+        height:auto;
+        gap:10px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
 
-/* Left section: menu + heading */
-#nav1{
-    width:100%;
-    justify-content:center;
-    gap:14px;
-}
+    /* Left section: menu + heading */
+    #nav1{
+        width:100%;
+        justify-content:center;
+        gap:14px;
+    }
 
-/* Hide all extra desktop options */
-#nav2 .a{
-    display:none;
-}
+    /* Hide all extra desktop options */
+    #nav2 .a{
+        display:none;
+    }
 
-/* Keep ONLY login button visible */
-#nav2{
-    width:100%;
-    justify-content:center;
-}
+    /* Keep ONLY login button visible */
+    #nav2{
+        width:100%;
+        justify-content:center;
+    }
 
-/* Login as real interactive element */
-#log-btn{
-    display:block;
-    text-align:center;
-}
+    /* Login as real interactive element */
+    #log-btn{
+        display:block;
+        text-align:center;
+    }
 
 }
 @media(max-width:480px){
 
-.nav{
-    padding:10px 12px;
+    .nav{
+        padding:10px 12px;
+    }
+
+    /* perfect center for smallest screens */
+    #nav1 h1{
+        font-size:1.8rem;
+        text-align:center;
+    }
+
+    #nav1 h2{
+        font-size:1.6rem;
+        padding:3px 6px;
+    }
+
+    #nav2{
+        align-items:center;
+        justify-content:center;
+    }
+
+}
+@media(max-width:1024px){
+
+    #hero{
+        height:auto;
+        padding:60px 20px;
+    }
+
+    /* big text shrink to readable */
+    #hero-text h1{
+        font-size:4.2rem;
+        line-height:1.1;
+    }
+
+    #hero-text p{
+        font-size:1.4rem;
+    }
+
+    /* escape button center safe */
+    #hero-btn{
+        width:50%;
+        display:flex;
+        justify-content:center;
+    }
+
+    #hero-btn .hero-btn-link{
+        width:90%;
+        max-width:420px;
+    }
+
+}
+@media(max-width:600px){
+
+    /* hero container always fits */
+    #hero{
+        padding:90px 14px;
+        background-size:cover;
+        background-position:center;
+    }
+
+/* mobile perfect headline */
+#hero-text h1{
+    font-size:2.6rem;
+    text-align:center;
+    width:100%;
 }
 
-/* perfect center for smallest screens */
-#nav1 h1{
-    font-size:1.8rem;
+/* paragraph fit */
+#hero-text p{
+    font-size:1rem;
     text-align:center;
 }
 
-#nav1 h2{
-    font-size:1.6rem;
-    padding:3px 6px;
+/* make icons inline safe */
+.hero-icon{
+    font-size:1.1rem;
 }
 
-#nav2{
-    align-items:center;
-    justify-content:center;
+#hero-btn .hero-btn-link{
+    width:92%;
+    height:44px;
+    margin:0 auto;
+    font-size:1.1rem;
 }
 
 }
+@media(max-width:420px){
+
+    #hero-text h1{
+        font-size:2.2rem;
+    }
+
+    #hero-text p{
+        width:96%;
+    }
+
+}
+
