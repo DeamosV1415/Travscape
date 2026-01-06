@@ -623,20 +623,13 @@ a {
 }
 
 #chatbot {
-    margin-top: 120px;
     width: 100%;
-    min-height: 300px;
+    min-height: 250px;
     border-radius: 10px;
-
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: center;
-
-    background-image: url(/Travescape/home/imgs/12.jpg);
-    background-size: cover;
-    background-position: center;
-
     position: relative;
     overflow: hidden;
 }
@@ -646,8 +639,11 @@ a {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.033); /* adjust darkness */
     z-index: 0;
+    background: linear-gradient(
+        rgba(25, 130, 190, 0.142),
+        rgba(94, 175, 221, 0.45)
+    );
 }
 
 /* Card style */
@@ -660,29 +656,42 @@ a {
     padding: 12px 14px;
 
     font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #000;
+    
+    color:#285b7f;
 
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     border-radius: 20px;
-
-    /* Card shadow */
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
+
 .card {
-    backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.133);
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.72);
 }
 
-
-.card a{
-    color: black;
+.card h2{
+    font-size: 1.4rem;
+    color: #1b3154;
 }
 
+.card p{
+    font-size: 1rem;
+    color: #406db6ef;
+}
+.card:hover{
+    transition: all 0.5s ease-in-out;
+    transform: translateY(-10px);
+}
+.card:hover p{
+    color: #1b3154;
+}
+.card:hover h2{
+    color: #1b3154;
+    text-shadow: 0 0 10px rgba(190, 37, 241, 0.477);
+}
 .footer {
     margin-top: 120px;
     height: 7%;
