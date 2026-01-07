@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="icon" type="train-icon" href="./snowflake-fill.svg">
+    <script type="module" src="/Travescape/js/auth-handler.js"></script>
 </head>
 
 <body>
@@ -17,7 +18,7 @@
             <h1><a href="./index.html">Traves<i class="ri-snowflake-fill"></i>cape</a></h1>
         </div>
         <div id="nav2">
-            <a style="text-decoration: none; color: white;" href="../Coming%20soon/index.html">
+            <a style="text-decoration: none; color: white;" href="/Travescape/account/sign up/index.html">
                 <h4 class="a">Get Inspired</h4>
             </a>
             <h4 id="log-btn">Log in</h4>
@@ -27,17 +28,32 @@
         </div>
     </div>
     <div id="logincard">
-        <div id="card">
-            <div id="c2">
-                <h2>WELCOME TO TRAVESCAPE</h2>
-                <form id="loginform" action="">
-                    <input id="input" type="email" name="email" placeholder="Email">
+            <div id="card">
+                <div id="c2">
+                    <h2>WELCOME TO TRAVESCAPE</h2>
+                    <div class="error-message" style="display: none;"></div>
+                    <div class="success-message" style="display: none;"></div>
+                    <form id="loginform">
+                    <div class="input-group">
+                        <i class="ri-mail-line input-icon"></i>
+                        <input id="input" type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="ri-lock-line input-icon"></i>
+                        <input id="password-input" class="password-input" type="password" name="password" placeholder="Password" required>
+                        <i class="ri-eye-line password-toggle" id="togglePassword"></i>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                    </div>
                     <button id="lgbtn" type="submit">Log in</button>
                 </form>
             </div>
             <div id="c3">
-                <button id="gl" type="button"> <img src="imgs/google.png" alt="">Sign in With Google</button>
-                <a href="../Coming%20soon/index.html">
+                <button id="gl" type="button">
+                    <img src="imgs/google.png" alt="">Sign in With Google
+                </button>
+                <a href="/Travescape/account/sign up/index.html">
                     <h4>Don't have an account? <span>Sign Up</span></h4>
                 </a>
             </div>
@@ -158,6 +174,7 @@
 
 
     <script src="script.js"></script>
+    <script src="login-firebase.js"></script>
 </body>
 
 </html>

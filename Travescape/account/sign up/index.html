@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Travescape</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(180deg, #132440, #16476A, #3B9797);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: linear-gradient(135deg, rgba(16, 42, 76, 0.9) 0%, rgba(13, 34, 56, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 450px;
+            color: white;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: white;
+        }
+
+        .logo i {
+            color: #489edc;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #489edc;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(72, 158, 220, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-input.error {
+            border-color: #ff6b6b;
+        }
+
+        .form-input.success {
+            border-color: #4cd964;
+        }
+
+        .input-feedback {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+        }
+
+        .input-feedback.checking {
+            color: #489edc;
+        }
+
+        .input-feedback.available {
+            color: #4cd964;
+        }
+
+        .input-feedback.taken {
+            color: #ff6b6b;
+        }
+
+        .field-hint {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .field-hint.error {
+            color: #ff6b6b;
+        }
+
+        .field-hint.success {
+            color: #4cd964;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #489edc;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #489edc, #3B9797);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(72, 158, 220, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider span {
+            background: linear-gradient(135deg, rgba(16, 42, 76, 0.9) 0%, rgba(13, 34, 56, 0.8) 100%);
+            padding: 0 15px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .switch-auth {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .switch-auth a {
+            color: #489edc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .switch-auth a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(76, 217, 100, 0.2);
+            border: 1px solid rgba(76, 217, 100, 0.4);
+            color: #4cd964;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">
+            <h1>Traves<i class="ri-snowflake-fill"></i>cape</h1>
+        </div>
+
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join us and start your journey</p>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <div class="input-wrapper">
+                    <i class="ri-user-line input-icon"></i>
+                    <input type="text" class="form-input" id="fullName" placeholder="John Doe" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <div class="input-wrapper">
+                    <i class="ri-at-line input-icon"></i>
+                    <input type="text" class="form-input" id="username" placeholder="johndoe" required>
+                    <span class="input-feedback" id="usernameFeedback"></span>
+                </div>
+                <div class="field-hint" id="usernameHint">Choose a unique username (3-20 characters, letters, numbers, underscore only)</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <div class="input-wrapper">
+                    <i class="ri-mail-line input-icon"></i>
+                    <input type="email" class="form-input" id="email" placeholder="john@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <i class="ri-lock-line input-icon"></i>
+                    <input type="password" class="form-input" id="password" placeholder="••••••••" required>
+                    <i class="ri-eye-line password-toggle" id="togglePassword"></i>
+                </div>
+                <div class="field-hint">At least 6 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <div class="input-wrapper">
+                    <i class="ri-lock-line input-icon"></i>
+                    <input type="password" class="form-input" id="confirmPassword" placeholder="••••••••" required>
+                    <i class="ri-eye-line password-toggle" id="toggleConfirmPassword"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Create Account
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>or continue with</span>
+        </div>
+
+        <div class="social-login">
+            <button class="social-btn" id="googleBtn">
+                <i class="ri-google-fill"></i> Google
+            </button>
+        </div>
+
+        <div class="switch-auth">
+            Already have an account? <a href="/Travescape/login.html">Sign In</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, query, collection, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase config - REPLACE WITH YOUR CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyTjUQM4kg4EBjrkIWBAlup_lQVAncqm4",
+            authDomain: "travescape-89164.firebaseapp.com",
+            projectId: "travescape-89164",
+            storageBucket: "travescape-89164.firebasestorage.app",
+            messagingSenderId: "823041925414",
+            appId: "1:823041925414:web:30d29c27aff6b96733a1e7",
+            measurementId: "G-CMXEGP7YW7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // DOM Elements
+        const signupForm = document.getElementById('signupForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const usernameInput = document.getElementById('username');
+        const usernameFeedback = document.getElementById('usernameFeedback');
+        const usernameHint = document.getElementById('usernameHint');
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const googleBtn = document.getElementById('googleBtn');
+
+        let usernameAvailable = false;
+        let usernameCheckTimeout;
+
+        // Password Toggle
+        togglePassword.addEventListener('click', () => {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            togglePassword.className = type === 'password' ? 'ri-eye-line password-toggle' : 'ri-eye-off-line password-toggle';
+        });
+
+        toggleConfirmPassword.addEventListener('click', () => {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+            confirmPasswordInput.type = type;
+            toggleConfirmPassword.className = type === 'password' ? 'ri-eye-line password-toggle' : 'ri-eye-off-line password-toggle';
+        });
+
+        // Check username availability in real-time
+        usernameInput.addEventListener('input', async (e) => {
+            const username = e.target.value.toLowerCase().trim();
+            
+            // Clear previous timeout
+            clearTimeout(usernameCheckTimeout);
+            
+            // Reset feedback
+            usernameInput.classList.remove('error', 'success');
+            usernameFeedback.innerHTML = '';
+            usernameFeedback.className = 'input-feedback';
+            usernameHint.className = 'field-hint';
+            usernameAvailable = false;
+
+            // Validate format
+            const usernameRegex = /^[a-z0-9_]{3,20}$/;
+            
+            if (username.length === 0) {
+                return;
+            }
+            
+            if (!usernameRegex.test(username)) {
+                usernameInput.classList.add('error');
+                usernameFeedback.innerHTML = '<i class="ri-close-circle-fill"></i>';
+                usernameFeedback.classList.add('taken');
+                usernameHint.textContent = 'Invalid format. Use 3-20 characters (letters, numbers, underscore only)';
+                usernameHint.classList.add('error');
+                return;
+            }
+
+            // Show checking status
+            usernameFeedback.innerHTML = '<i class="ri-loader-4-line"></i>';
+            usernameFeedback.classList.add('checking');
+            
+            // Debounce the check
+            usernameCheckTimeout = setTimeout(async () => {
+                try {
+                    // Check if username exists in Firestore
+                    const usernamesRef = collection(db, 'usernames');
+                    const q = query(usernamesRef, where('username', '==', username));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (querySnapshot.empty) {
+                        // Username is available
+                        usernameInput.classList.add('success');
+                        usernameFeedback.innerHTML = '<i class="ri-check-line"></i>';
+                        usernameFeedback.classList.remove('checking');
+                        usernameFeedback.classList.add('available');
+                        usernameHint.textContent = 'Username is available!';
+                        usernameHint.classList.add('success');
+                        usernameAvailable = true;
+                    } else {
+                        // Username is taken
+                        usernameInput.classList.add('error');
+                        usernameFeedback.innerHTML = '<i class="ri-close-circle-fill"></i>';
+                        usernameFeedback.classList.remove('checking');
+                        usernameFeedback.classList.add('taken');
+                        usernameHint.textContent = 'Username is already taken';
+                        usernameHint.classList.add('error');
+                        usernameAvailable = false;
+                    }
+                } catch (error) {
+                    console.error('Error checking username:', error);
+                    usernameFeedback.innerHTML = '';
+                }
+            }, 500); // Wait 500ms after user stops typing
+        });
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        // Sign Up with Email/Password
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const username = usernameInput.value.toLowerCase().trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!usernameAvailable) {
+                showError('Please choose an available username!');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match!');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters!');
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Creating Account...';
+
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Generate unique user ID (Firebase UID is already unique)
+                const userId = user.uid;
+
+                // Update profile with display name
+                await updateProfile(user, {
+                    displayName: fullName
+                });
+
+                // Save username mapping (for uniqueness checking)
+                await setDoc(doc(db, 'usernames', username), {
+                    username: username,
+                    userId: userId,
+                    createdAt: new Date().toISOString()
+                });
+
+                // Save complete user data to Firestore
+                await setDoc(doc(db, 'users', userId), {
+                    userId: userId,                    // Unique user ID
+                    username: username,                // Unique username
+                    fullName: fullName,
+                    email: email,
+                    photoURL: '',
+                    location: '',
+                    phone: '',
+                    birthday: '',
+                    bio: '',
+                    trips: [],
+                    countries: 0,
+                    followers: 0,
+                    following: 0,
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString()
+                });
+
+                showSuccess('Account created successfully! Redirecting...');
+                
+                // Redirect to home page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/home/index.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Signup error:', error);
+                let errorMsg = 'An error occurred. Please try again.';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMsg = 'This email is already registered!';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'Invalid email address!';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMsg = 'Password is too weak!';
+                }
+                
+                showError(errorMsg);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Create Account';
+            }
+        });
+
+        // Google Sign In
+        googleBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const userId = user.uid;
+
+                // Check if user document exists
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                
+                if (!userDoc.exists()) {
+                    // Generate username from email (or let user choose later)
+                    let username = user.email.split('@')[0].toLowerCase();
+                    
+                    // Check if username exists, if so add numbers
+                    let usernameExists = true;
+                    let counter = 1;
+                    let finalUsername = username;
+                    
+                    while (usernameExists) {
+                        const usernameDoc = await getDoc(doc(db, 'usernames', finalUsername));
+                        if (!usernameDoc.exists()) {
+                            usernameExists = false;
+                        } else {
+                            finalUsername = `${username}${counter}`;
+                            counter++;
+                        }
+                    }
+                    
+                    // Save username mapping
+                    await setDoc(doc(db, 'usernames', finalUsername), {
+                        username: finalUsername,
+                        userId: userId,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    // Create user document
+                    await setDoc(doc(db, 'users', userId), {
+                        userId: userId,
+                        username: finalUsername,
+                        fullName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL || '',
+                        location: '',
+                        phone: '',
+                        birthday: '',
+                        bio: '',
+                        trips: [],
+                        countries: 0,
+                        followers: 0,
+                        following: 0,
+                        createdAt: new Date().toISOString(),
+                        lastLogin: new Date().toISOString()
+                    });
+                } else {
+                    // Update last login
+                    await setDoc(doc(db, 'users', userId), {
+                        lastLogin: new Date().toISOString()
+                    }, { merge: true });
+                }
+
+                showSuccess('Signed in successfully! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = '/Travescape/home/index.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Google sign in error:', error);
+                showError('Failed to sign in with Google. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
