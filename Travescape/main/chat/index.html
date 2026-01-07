@@ -70,7 +70,49 @@
 
     </div>
     <div class="chatbox">
-        
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-content">
+                <div class="welcome-icon">
+                    <i class="ri-chat-smile-3-line"></i>
+                </div>
+                <h1 class="welcome-title">Welcome to Travscape AI</h1>
+                <p class="welcome-subtitle">Your intelligent travel companion</p>
+                <p class="welcome-hint">Start typing below to begin your journey...</p>
+            </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="messages-container" id="messagesContainer">
+            <!-- Messages will be dynamically added here -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-bubble">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-wrapper">
+
+                <textarea id="messageInput" placeholder="Ask me anything about travel..." rows="1"
+                    maxlength="2000"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <i class="ri-send-plane-fill"></i>
+                </button>
+            </div>
+            <div class="input-footer">
+                <span class="char-count" id="charCount">0/2000</span>
+                <span class="powered-by">Powered by Travscape AI</span>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
