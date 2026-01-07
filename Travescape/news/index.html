@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Travscape</title>
+    <meta name="description"
+        content="Stay updated with the latest travel news, tourism trends, and destination insights from Travscape.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="icon" type="train-icon" href="/Travescape/home/snowflake-fill.svg">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="n1">
+            <h2 id="menu"><i class="ri-menu-5-fill"></i></h2>
+            <div id="n1_h2">News</div>
+        </div>
+        <div class="n2">
+            <h1><a href="/Travescape/home/index.html">Traves<i class="ri-snowflake-fill"></i>cape</a></h1>
+        </div>
+        <div class="n3">
+            <a href=""><button id="plan">Plan Your Escapes</button></a>
+            <div id="profile"><a href=""><img src="/Travescape/home/logo.jpg" alt=""></a></div>
+        </div>
+    </div>
+
+    <!-- Circular Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu">
+            <a href="/Travescape/home/index.html">
+                <div class="sector"></div>
+                <div class="option">
+                    <span class="material-icons-round"><i class="ri-home-2-line"></i></span>
+                    <div class="name">Home</div>
+                </div>
+            </a>
+            <a href="/Travescape/index.html">
+                <div class="sector"></div>
+                <div class="option">
+                    <span class="material-icons-round"><i class="ri-suitcase-3-line"></i></span>
+                    <div class="name">Trips</div>
+                </div>
+            </a>
+            <a href="/Travescape/blogs/index.html">
+                <div class="sector"></div>
+                <div class="option">
+                    <span class="material-icons-round"><i class="ri-newspaper-line"></i></span>
+                    <div class="name">News</div>
+                </div>
+            </a>
+            <a href="/Travescape/index.html">
+                <div class="sector"></div>
+                <div class="option">
+                    <span class="material-icons-round"><i class="ri-compass-discover-line"></i></span>
+                    <div class="name">Explore</div>
+                </div>
+            </a>
+            <a href="/Travescape/main/chat/index.html">
+                <div class="sector"></div>
+                <div class="option">
+                    <span class="material-icons-round"><i class="ri-chat-3-line"></i></span>
+                    <div class="name">Chats</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- News Feed Container -->
+    <div class="news-container">
+        <div class="news-header">
+            <h1>Latest Travel News</h1>
+            <p class="news-subtitle">Stay updated with trending stories from around the world</p>
+        </div>
+
+        <!-- News Grid -->
+        <div class="news-grid" id="newsGrid">
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loading-spinner"></div>
+                <p>Loading latest news...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
