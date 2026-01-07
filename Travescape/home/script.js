@@ -1,15 +1,14 @@
 var body = document.querySelector("body");
 var login = document.querySelector("#log-btn");
 var logincard = document.querySelector("#logincard");
-var img_arr=[
-    {img:"/Travescape/home/imgs/img1/1.avif"},{img:"/Travescape/home/imgs/img1/2.avif"},
-    {img:"/Travescape/home/imgs/img1/3.avif"},{img:"/Travescape/home/imgs/img1/4.avif"},
-    {img:"/Travescape/home/imgs/img1/5.avif"},{img:"/Travescape/home/imgs/img1/6.avif"},
-    {img:"/Travescape/home/imgs/img1/7.avif"},{img:"/Travescape/home/imgs/img1/8.avif"},
-    {img:"/Travescape/home/imgs/img1/9.avif"},{img:"/Travescape/home/imgs/img1/10.avif"},
-    {img:"/Travescape/home/imgs/img1/11.avif"},{img:"/Travescape/home/imgs/img1/12.avif"},
-    {img:"/Travescape/home/imgs/img1/13.avif"},{img:"/Travescape/home/imgs/img1/14.avif"}
-
+var img_arr = [
+    { img: "./imgs/img1/1.avif" }, { img: "./imgs/img1/2.avif" },
+    { img: "./imgs/img1/3.avif" }, { img: "./imgs/img1/4.avif" },
+    { img: "./imgs/img1/5.avif" }, { img: "./imgs/img1/6.avif" },
+    { img: "./imgs/img1/7.avif" }, { img: "./imgs/img1/8.avif" },
+    { img: "./imgs/img1/9.avif" }, { img: "./imgs/img1/10.avif" },
+    { img: "./imgs/img1/11.avif" }, { img: "./imgs/img1/12.avif" },
+    { img: "./imgs/img1/13.avif" }, { img: "./imgs/img1/14.avif" }
 ]
 
 
@@ -54,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let optionAngle =
             angle + Math.abs(skewVal) + (90 - Math.abs(skewVal)) / 2;
 
-        options[index].style.transform = 
+        options[index].style.transform =
             `rotateZ(${optionAngle}deg) translateY(-140px) rotate(-${optionAngle}deg)`;
 
         sector.style.transform = `rotate(${angle}deg) skew(${skewVal}deg)`;
@@ -84,38 +83,38 @@ document.addEventListener("DOMContentLoaded", () => {
 let clutter = "";
 
 img_arr.forEach(i => {
-  clutter += `<img class="photo" src="${i.img}" alt="">`;
+    clutter += `<img class="photo" src="${i.img}" alt="">`;
 });
 
 document.querySelector(".trip-photo").innerHTML = clutter + clutter;
 function enableCardScroll() {
 
-  const cards = document.querySelectorAll("#chatbot .card");
+    const cards = document.querySelectorAll("#chatbot .card");
 
-  cards.forEach(card => {
+    cards.forEach(card => {
 
-    /* --- touch swipe scrolling --- */
-    let startY = 0;
-    let scrollTop = 0;
+        /* --- touch swipe scrolling --- */
+        let startY = 0;
+        let scrollTop = 0;
 
-    card.addEventListener("touchstart", e => {
-      startY = e.touches[0].pageY;
-      scrollTop = card.scrollTop;
+        card.addEventListener("touchstart", e => {
+            startY = e.touches[0].pageY;
+            scrollTop = card.scrollTop;
+        });
+
+        card.addEventListener("touchmove", e => {
+            const y = e.touches[0].pageY;
+            const walk = startY - y;
+            card.scrollTop = scrollTop + walk;
+        });
+
+        /* --- mouse wheel support --- */
+        card.addEventListener("wheel", e => {
+            card.scrollTop += e.deltaY;
+            e.preventDefault();
+        });
+
     });
-
-    card.addEventListener("touchmove", e => {
-      const y = e.touches[0].pageY;
-      const walk = startY - y;
-      card.scrollTop = scrollTop + walk;
-    });
-
-    /* --- mouse wheel support --- */
-    card.addEventListener("wheel", e => {
-      card.scrollTop += e.deltaY;
-      e.preventDefault();
-    });
-
-  });
 
 }
 

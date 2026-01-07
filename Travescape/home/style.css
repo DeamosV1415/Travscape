@@ -205,7 +205,7 @@ a {
     align-items: center;
     justify-content: center;
     gap: 35px;
-    background-image: url("/Travescape/home/logo.jpg");
+    background-image: url("./logo.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -421,7 +421,7 @@ a {
     margin-top: 1px;
     height: 55%;
     width: 100%;
-    background-image: url("/Travescape/home/imgs/bg.jpg");
+    background-image: url("./imgs/bg.jpg");
     background-size: cover;
     background-position: center;
     padding: 10px 20px;
@@ -602,7 +602,7 @@ a {
 
 /* image styling */
 .photo {
-    height: 550px; 
+    height: 550px;
     width: 60%;
     border-radius: 20px;
     box-shadow: 0 0 6px rgba(58, 162, 248, 0.7);
@@ -638,14 +638,14 @@ a {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: linear-gradient(
-        rgba(25, 130, 190, 0.142),
-        rgba(94, 175, 221, 0.45)
-    );
+    background: linear-gradient(rgba(25, 130, 190, 0.142),
+            rgba(94, 175, 221, 0.45));
 }
-#chatbot .card{
+
+#chatbot .card {
     opacity: 1
 }
+
 /* Card style */
 .card {
     position: relative;
@@ -656,42 +656,46 @@ a {
     padding: 12px 14px;
 
     font-family: 'DM Sans', sans-serif;
-    
-    color:#285b7f;
+
+    color: #285b7f;
 
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 .card {
     backdrop-filter: blur(14px);
-    background: rgba(255,255,255,0.72);
+    background: rgba(255, 255, 255, 0.72);
 }
 
-.card h2{
+.card h2 {
     font-size: 1.4rem;
     color: #1b3154;
 }
 
-.card p{
+.card p {
     font-size: 1rem;
     color: rgba(64, 109, 182, 0.95);
 }
-.card:hover{
+
+.card:hover {
     transition: all 0.5s ease-in-out;
     text-shadow: 0 0 10px rgba(190, 37, 241, 0.477);
 }
-.card:hover p{
+
+.card:hover p {
     color: #1b3154;
 }
-.card:hover h2{
+
+.card:hover h2 {
     color: #1b3154;
     text-shadow: 0 0 10px rgba(190, 37, 241, 0.477);
 }
+
 .footer {
     margin-top: 120px;
     height: 7%;
@@ -707,4 +711,3 @@ a {
     font-weight: 200;
     font-size: 1rem;
 }
-

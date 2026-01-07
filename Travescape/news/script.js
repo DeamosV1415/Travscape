@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // NEWS FETCHING & DISPLAY
 // ===============================
 
-const FALLBACK_IMAGE = "/Travescape/home/card.jpg";
+const FALLBACK_IMAGE = "../home/card.jpg";
 
 async function getApiKey() {
     try {
