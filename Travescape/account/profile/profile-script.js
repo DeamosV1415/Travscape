@@ -39,9 +39,31 @@ async function loadUserData() {
         if (userDoc.exists()) {
             currentUserData = userDoc.data();
             populateProfilePage();
+        } else {
+            console.warn('User document not found in Firestore');
+            // Use basic auth data
+            currentUserData = {
+                fullName: currentUser.displayName || 'User',
+                email: currentUser.email,
+                username: currentUser.email.split('@')[0],
+                createdAt: currentUser.metadata.creationTime
+            };
+            populateProfilePage();
         }
     } catch (error) {
         console.error('Error loading user data:', error);
+        // Show error message to user
+        if (error.code === 'unavailable' || error.message.includes('does not exist')) {
+            showNotification('⚠️ Firestore database not set up. Please enable Firestore in Firebase Console.', 'error');
+            // Use basic auth data as fallback
+            currentUserData = {
+                fullName: currentUser.displayName || 'User',
+                email: currentUser.email,
+                username: currentUser.email.split('@')[0],
+                createdAt: currentUser.metadata.creationTime
+            };
+            populateProfilePage();
+        }
     }
 }
 
@@ -64,24 +86,30 @@ function populateProfilePage() {
     }
 
     // Update avatar
-    const avatarImg = document.querySelector('.avatar-wrapper img');
+    const avatarImg = document.getElementById('profile-avatar');
     if (avatarImg && currentUser.photoURL) {
         avatarImg.src = currentUser.photoURL;
     }
 
-    // Update stats
-    const statNumbers = document.querySelectorAll('.stat-number');
-    if (statNumbers.length >= 3) {
-        statNumbers[0].textContent = currentUserData.trips?.length || 0;
-        statNumbers[1].textContent = currentUserData.countries || 0;
-        statNumbers[2].textContent = currentUserData.followers || 0;
-    }
+    // Update stats using IDs
+    const statTrips = document.getElementById('stat-trips');
+    const statCountries = document.getElementById('stat-countries');
+    const statFollowers = document.getElementById('stat-followers');
 
-    // Update info fields
-    updateInfoField('Email', currentUserData.email);
-    updateInfoField('Location', currentUserData.location || 'Not set');
-    updateInfoField('Birthday', currentUserData.birthday ? formatDate(currentUserData.birthday) : 'Not set');
-    updateInfoField('Phone', currentUserData.phone || 'Not set');
+    if (statTrips) statTrips.textContent = currentUserData.trips?.length || 0;
+    if (statCountries) statCountries.textContent = currentUserData.countries || 0;
+    if (statFollowers) statFollowers.textContent = currentUserData.followers || 0;
+
+    // Update info fields using IDs
+    const infoEmail = document.getElementById('info-email');
+    const infoLocation = document.getElementById('info-location');
+    const infoBirthday = document.getElementById('info-birthday');
+    const infoPhone = document.getElementById('info-phone');
+
+    if (infoEmail) infoEmail.textContent = currentUserData.email;
+    if (infoLocation) infoLocation.textContent = currentUserData.location || 'Not set';
+    if (infoBirthday) infoBirthday.textContent = currentUserData.birthday ? formatDate(currentUserData.birthday) : 'Not set';
+    if (infoPhone) infoPhone.textContent = currentUserData.phone || 'Not set';
 }
 
 function updateInfoField(label, value) {

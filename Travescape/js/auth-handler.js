@@ -35,9 +35,28 @@ onAuthStateChanged(auth, async (user) => {
             if (userDoc.exists()) {
                 currentUserData = userDoc.data();
                 updateUIWithUserData();
+            } else {
+                console.warn('User document does not exist in Firestore');
+                // Still update UI with basic user info from Auth
+                currentUserData = {
+                    fullName: user.displayName || 'User',
+                    email: user.email,
+                    username: user.email.split('@')[0]
+                };
+                updateUIWithUserData();
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
+            // If Firestore is not available, use basic auth data
+            if (error.code === 'unavailable' || error.code === 'not-found') {
+                console.warn('Firestore not available. Using basic auth data.');
+                currentUserData = {
+                    fullName: user.displayName || 'User',
+                    email: user.email,
+                    username: user.email.split('@')[0]
+                };
+                updateUIWithUserData();
+            }
         }
 
     } else {
@@ -82,33 +101,38 @@ function updateUIWithUserData() {
         }
     }
 
-    // Update home page user greeting
-    const userGreeting = document.getElementById('log-btn');
-    if (userGreeting && currentUserData) {
-        const firstName = currentUserData.fullName ? currentUserData.fullName.split(' ')[0] : currentUser.displayName?.split(' ')[0] || 'User';
-        userGreeting.textContent = `Welcome, ${firstName}`;
-        userGreeting.style.cursor = 'pointer';
+    // Update home page user greeting - WAIT FOR DOM
+    setTimeout(() => {
+        const userGreeting = document.getElementById('log-btn');
+        console.log('User greeting element:', userGreeting); // Debug
+        console.log('Current user data:', currentUserData); // Debug
 
-        // Make it clickable to go to profile
-        userGreeting.onclick = () => {
-            const currentPage = window.location.pathname;
-            if (currentPage.includes('/home/')) {
-                window.location.href = '../account/profile/index.html';
-            } else if (currentPage.includes('/main/chat/')) {
-                window.location.href = '../../account/profile/index.html';
-            }
-        };
-    } else if (userGreeting) {
-        // User not logged in - make it go to login page
-        userGreeting.textContent = 'Log in';
-        userGreeting.style.cursor = 'pointer';
-        userGreeting.onclick = () => {
-            const currentPage = window.location.pathname;
-            if (currentPage.includes('/home/')) {
-                window.location.href = '../account/sign up/login.html';
-            }
-        };
-    }
+        if (userGreeting && currentUserData) {
+            const firstName = currentUserData.fullName ? currentUserData.fullName.split(' ')[0] : currentUser.displayName?.split(' ')[0] || 'User';
+            userGreeting.textContent = `Welcome, ${firstName}`;
+            userGreeting.style.cursor = 'pointer';
+
+            // Make it clickable to go to profile
+            userGreeting.onclick = () => {
+                const currentPage = window.location.pathname;
+                if (currentPage.includes('/home/')) {
+                    window.location.href = '../account/profile/index.html';
+                } else if (currentPage.includes('/main/chat/')) {
+                    window.location.href = '../../account/profile/index.html';
+                }
+            };
+        } else if (userGreeting) {
+            // User not logged in - make it go to login page
+            userGreeting.textContent = 'Log in';
+            userGreeting.style.cursor = 'pointer';
+            userGreeting.onclick = () => {
+                const currentPage = window.location.pathname;
+                if (currentPage.includes('/home/')) {
+                    window.location.href = '../account/sign up/login.html';
+                }
+            };
+        }
+    }, 100); // Small delay to ensure DOM is ready
 
     // If on profile page, populate data
     if (window.location.pathname.includes('profile/index.html')) {
