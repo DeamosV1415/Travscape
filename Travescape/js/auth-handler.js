@@ -42,12 +42,12 @@ onAuthStateChanged(auth, async (user) => {
         
     } else {
         // User is NOT logged in - redirect to login
-        const publicPages = ['/login.html', '/signup.html', '/index.html'];
+        const publicPages = ['./Travescape/account/signup/login.html', './Travescape/account/signup/signup.html', './Travescape/home/index.html'];
         const currentPage = window.location.pathname;
         
         // If not on a public page, redirect to login
         if (!publicPages.some(page => currentPage.includes(page))) {
-            window.location.href = '/login.html';
+            window.location.href = './Travescape/account/signup/login.html';
         }
     }
 });
@@ -63,11 +63,11 @@ function updateUIWithUserData() {
     // Update profile link to go to profile page
     const profileLink = document.querySelector('#profile a');
     if (profileLink) {
-        profileLink.href = '/profile.html';
+        profileLink.href = './Travescape/account/profile/index.html';
     }
     
     // If on profile page, populate data
-    if (window.location.pathname.includes('profile.html')) {
+    if (window.location.pathname.includes('./Travescape/account/profile/index.html')) {
         populateProfilePage();
     }
 }
@@ -77,7 +77,7 @@ function populateProfilePage() {
     if (!currentUserData || !currentUser) return;
     
     // Update profile name
-    const profileName = document.querySelector('.profile-name');
+    const profileName = document.querySelector('#profile-name');
     if (profileName) {
         profileName.textContent = currentUserData.fullName || currentUser.displayName;
     }
