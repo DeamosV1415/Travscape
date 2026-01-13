@@ -1,6 +1,5 @@
 var body = document.querySelector("body");
-var login = document.querySelector("#log-btn");
-var logincard = document.querySelector("#logincard");
+
 var img_arr = [
     { img: "./imgs/img1/1.avif" }, { img: "./imgs/img1/2.avif" },
     { img: "./imgs/img1/3.avif" }, { img: "./imgs/img1/4.avif" },
@@ -12,19 +11,6 @@ var img_arr = [
 ]
 
 
-function openOverlay(target) {
-    closeAllOverlays();
-    target.classList.add("show");
-}
-
-function closeAllOverlays() {
-    logincard.classList.remove("show");
-}
-
-login.addEventListener("click", () => openOverlay(logincard));
-logincard.addEventListener("click", (e) => {
-    if (e.target === logincard) logincard.classList.remove("show");
-});
 
 document.addEventListener("DOMContentLoaded", () => {
 
