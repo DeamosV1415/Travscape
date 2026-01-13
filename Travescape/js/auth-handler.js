@@ -82,6 +82,34 @@ function updateUIWithUserData() {
         }
     }
 
+    // Update home page user greeting
+    const userGreeting = document.getElementById('log-btn');
+    if (userGreeting && currentUserData) {
+        const firstName = currentUserData.fullName ? currentUserData.fullName.split(' ')[0] : currentUser.displayName?.split(' ')[0] || 'User';
+        userGreeting.textContent = `Welcome, ${firstName}`;
+        userGreeting.style.cursor = 'pointer';
+
+        // Make it clickable to go to profile
+        userGreeting.onclick = () => {
+            const currentPage = window.location.pathname;
+            if (currentPage.includes('/home/')) {
+                window.location.href = '../account/profile/index.html';
+            } else if (currentPage.includes('/main/chat/')) {
+                window.location.href = '../../account/profile/index.html';
+            }
+        };
+    } else if (userGreeting) {
+        // User not logged in - make it go to login page
+        userGreeting.textContent = 'Log in';
+        userGreeting.style.cursor = 'pointer';
+        userGreeting.onclick = () => {
+            const currentPage = window.location.pathname;
+            if (currentPage.includes('/home/')) {
+                window.location.href = '../account/sign up/login.html';
+            }
+        };
+    }
+
     // If on profile page, populate data
     if (window.location.pathname.includes('profile/index.html')) {
         populateProfilePage();

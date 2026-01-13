@@ -39,8 +39,11 @@
                         <div class="stat-label">Followers</div>
                     </div>
                 </div>
-                <button class="edit-profile-btn">
+                <button class="edit-profile-btn" id="editProfileBtn">
                     <i class="ri-edit-line"></i> Edit Profile
+                </button>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="ri-logout-box-line"></i> Logout
                 </button>
             </div>
         </div>
@@ -162,6 +165,62 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="ri-edit-line"></i> Edit Profile</h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="editFullName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="editEmail" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="editLocation" placeholder="e.g., New York, USA">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="editPhone" placeholder="e.g., +1 (555) 123-4567">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Birthday</label>
+                        <input type="date" id="editBirthday">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="editBio" rows="3" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="save-btn">
+                        <i class="ri-save-line"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="profile-script.js"></script>
 </body>
 
 </html>
