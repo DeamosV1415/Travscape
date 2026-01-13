@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -280,10 +281,13 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="auth-container">
         <div class="logo">
@@ -348,7 +352,7 @@
         import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase config - REPLACE WITH YOUR CONFIG
-       const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyDyTjUQM4kg4EBjrkIWBAlup_lQVAncqm4",
             authDomain: "travescape-89164.firebaseapp.com",
             projectId: "travescape-89164",
@@ -398,7 +402,7 @@
         // Login with Email/Password
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -411,16 +415,16 @@
                 const user = userCredential.user;
 
                 showSuccess('Login successful! Redirecting...');
-                
+
                 // Redirect to home page
                 setTimeout(() => {
-                    window.location.href = '/home/index.html';
+                    window.location.href = '../../home/index.html';
                 }, 1500);
 
             } catch (error) {
                 console.error('Login error:', error);
                 let errorMsg = 'Invalid email or password!';
-                
+
                 if (error.code === 'auth/user-not-found') {
                     errorMsg = 'No account found with this email!';
                 } else if (error.code === 'auth/wrong-password') {
@@ -430,7 +434,7 @@
                 } else if (error.code === 'auth/too-many-requests') {
                     errorMsg = 'Too many failed attempts. Try again later.';
                 }
-                
+
                 showError(errorMsg);
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Sign In';
@@ -440,16 +444,43 @@
         // Google Sign In
         googleBtn.addEventListener('click', async () => {
             const provider = new GoogleAuthProvider();
-            
+
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
                 // Check if user document exists, if not create it
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
-                
+
                 if (!userDoc.exists()) {
+                    // Generate username from email
+                    let username = user.email.split('@')[0].toLowerCase();
+
+                    // Check if username exists, if so add numbers
+                    let usernameExists = true;
+                    let counter = 1;
+                    let finalUsername = username;
+
+                    while (usernameExists) {
+                        const usernameDoc = await getDoc(doc(db, 'usernames', finalUsername));
+                        if (!usernameDoc.exists()) {
+                            usernameExists = false;
+                        } else {
+                            finalUsername = `${username}${counter}`;
+                            counter++;
+                        }
+                    }
+
+                    // Save username mapping
+                    await setDoc(doc(db, 'usernames', finalUsername), {
+                        username: finalUsername,
+                        userId: user.uid,
+                        createdAt: new Date().toISOString()
+                    });
+
                     await setDoc(doc(db, 'users', user.uid), {
+                        userId: user.uid,
+                        username: finalUsername,
                         fullName: user.displayName,
                         email: user.email,
                         createdAt: new Date().toISOString(),
@@ -460,8 +491,15 @@
                         bio: '',
                         trips: [],
                         countries: 0,
-                        followers: 0
+                        followers: 0,
+                        following: 0,
+                        lastLogin: new Date().toISOString()
                     });
+                } else {
+                    // Update last login
+                    await setDoc(doc(db, 'users', user.uid), {
+                        lastLogin: new Date().toISOString()
+                    }, { merge: true });
                 }
 
                 showSuccess('Signed in successfully! Redirecting...');
@@ -476,4 +514,5 @@
         });
     </script>
 </body>
+
 </html>

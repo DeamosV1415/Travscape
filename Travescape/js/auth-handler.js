@@ -7,13 +7,13 @@ import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10
 
 // Firebase config - REPLACE WITH YOUR CONFIG
 const firebaseConfig = {
-  apiKey: "AIzaSyDyTjUQM4kg4EBjrkIWBAlup_lQVAncqm4",
-  authDomain: "travescape-89164.firebaseapp.com",
-  projectId: "travescape-89164",
-  storageBucket: "travescape-89164.firebasestorage.app",
-  messagingSenderId: "823041925414",
-  appId: "1:823041925414:web:30d29c27aff6b96733a1e7",
-  measurementId: "G-CMXEGP7YW7"
+    apiKey: "AIzaSyDyTjUQM4kg4EBjrkIWBAlup_lQVAncqm4",
+    authDomain: "travescape-89164.firebaseapp.com",
+    projectId: "travescape-89164",
+    storageBucket: "travescape-89164.firebasestorage.app",
+    messagingSenderId: "823041925414",
+    appId: "1:823041925414:web:30d29c27aff6b96733a1e7",
+    measurementId: "G-CMXEGP7YW7"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -28,7 +28,7 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         // User is logged in
         currentUser = user;
-        
+
         // Fetch user data from Firestore
         try {
             const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -39,15 +39,23 @@ onAuthStateChanged(auth, async (user) => {
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
-        
+
     } else {
         // User is NOT logged in - redirect to login
-        const publicPages = ['./Travescape/account/signup/login.html', './Travescape/account/signup/signup.html', './Travescape/home/index.html'];
+        const publicPages = ['login.html', 'signup.html', 'index.html'];
         const currentPage = window.location.pathname;
-        
+
         // If not on a public page, redirect to login
-        if (!publicPages.some(page => currentPage.includes(page))) {
-            window.location.href = './Travescape/account/signup/login.html';
+        const isPublicPage = publicPages.some(page => currentPage.includes(page));
+        if (!isPublicPage) {
+            // Determine relative path to login based on current location
+            if (currentPage.includes('/account/profile/')) {
+                window.location.href = '../sign up/login.html';
+            } else if (currentPage.includes('/main/chat/')) {
+                window.location.href = '../../account/sign up/login.html';
+            } else {
+                window.location.href = '../account/sign up/login.html';
+            }
         }
     }
 });
@@ -59,15 +67,23 @@ function updateUIWithUserData() {
     if (profileImg && currentUser.photoURL) {
         profileImg.src = currentUser.photoURL;
     }
-    
+
     // Update profile link to go to profile page
     const profileLink = document.querySelector('#profile a');
     if (profileLink) {
-        profileLink.href = './Travescape/account/profile/index.html';
+        // Determine relative path based on current location
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('/home/')) {
+            profileLink.href = '../account/profile/index.html';
+        } else if (currentPage.includes('/main/chat/')) {
+            profileLink.href = '../../account/profile/index.html';
+        } else {
+            profileLink.href = './index.html';
+        }
     }
-    
+
     // If on profile page, populate data
-    if (window.location.pathname.includes('./Travescape/account/profile/index.html')) {
+    if (window.location.pathname.includes('profile/index.html')) {
         populateProfilePage();
     }
 }
@@ -75,26 +91,26 @@ function updateUIWithUserData() {
 // Populate profile page with user data
 function populateProfilePage() {
     if (!currentUserData || !currentUser) return;
-    
+
     // Update profile name
     const profileName = document.querySelector('#profile-name');
     if (profileName) {
         profileName.textContent = currentUserData.fullName || currentUser.displayName;
     }
-    
+
     // Update username
     const profileUsername = document.querySelector('.profile-username');
     if (profileUsername) {
         const joinDate = new Date(currentUserData.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
         profileUsername.textContent = `@${currentUser.email.split('@')[0]} • Joined ${joinDate}`;
     }
-    
+
     // Update avatar
     const avatarImg = document.querySelector('.avatar-wrapper img');
     if (avatarImg && currentUser.photoURL) {
         avatarImg.src = currentUser.photoURL;
     }
-    
+
     // Update stats
     const statNumbers = document.querySelectorAll('.stat-number');
     if (statNumbers.length >= 3) {
@@ -102,7 +118,7 @@ function populateProfilePage() {
         statNumbers[1].textContent = currentUserData.countries || 0;
         statNumbers[2].textContent = currentUserData.followers || 0;
     }
-    
+
     // Update info fields
     updateInfoField('Email', currentUserData.email);
     updateInfoField('Location', currentUserData.location || 'Not set');
@@ -124,7 +140,15 @@ function updateInfoField(label, value) {
 // Logout function
 function logout() {
     signOut(auth).then(() => {
-        window.location.href = '/login.html';
+        // Determine relative path to login based on current location
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('/account/profile/')) {
+            window.location.href = '../sign up/login.html';
+        } else if (currentPage.includes('/main/chat/')) {
+            window.location.href = '../../account/sign up/login.html';
+        } else {
+            window.location.href = '../account/sign up/login.html';
+        }
     }).catch((error) => {
         console.error('Logout error:', error);
     });
@@ -141,14 +165,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
     }
-    
+
     // Handle "Plan Your Escapes" button
     const planBtn = document.getElementById('plan');
     if (planBtn) {
         planBtn.addEventListener('click', (e) => {
             if (!currentUser) {
                 e.preventDefault();
-                window.location.href = '/login.html';
+                // Determine relative path to login based on current location
+                const currentPage = window.location.pathname;
+                if (currentPage.includes('/home/')) {
+                    window.location.href = '../account/sign up/login.html';
+                } else {
+                    window.location.href = './account/sign up/login.html';
+                }
             }
         });
     }
