@@ -9,6 +9,7 @@ class AgentState(TypedDict):
   user_request: list
   need_trip_plan: bool
   needs_clarification: bool
+  route_to_orch: bool
   trip_plan: dict
   orchestrator_output: dict
   next_action: str

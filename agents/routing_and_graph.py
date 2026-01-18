@@ -10,12 +10,10 @@ from typing import Literal
 
 def route_after_chatbot(state: AgentState) -> Literal["orchestrator", "__end__"]:
     """Route from chatbot to orchestrator or end"""
-    if state["needs_clarification"]:
-        return "__end__"  # Wait for user response
-    elif state.get("user_request"):
-        return "orchestrator"  # Has trip request, proceed to orchestrator
+    if state.get("route_to_orch"):
+        return "orchestrator"
     else:
-        return "__end__"  # Casual conversation, done
+        return "__end__"
 
 def route_after_orchestrator(state: AgentState) -> Literal["tools", "planner", "__end__"]:
     """Route based on orchestrator's decision"""
@@ -28,11 +26,14 @@ def route_after_orchestrator(state: AgentState) -> Literal["tools", "planner", "
     elif next_action == "end":
         return "__end__"
     else:
+        # Default fallback
+        if state.get("pending_tasks"):
+            return "tools"
         return "__end__"
 
 def route_after_planner(state: AgentState) -> Literal["chatbot", "orchestrator"]:
     """Route from planner back to orchestrator or chatbot"""
-    if state["needs_clarification"]:
+    if state.get("needs_clarification"):
         return "chatbot"
     else:
         return "orchestrator"

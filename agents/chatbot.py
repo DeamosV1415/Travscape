@@ -14,14 +14,14 @@ load_dotenv(override=True)
 async def chatbot_node(state: AgentState) -> AgentState:
 
     chatbot = ChatOpenAI(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         temperature=0,
         max_tokens=None,
         timeout=None,
         max_retries=2,
     )
 
-    chatbot_with_output = chatbot.with_structured_output(chatbot_output)
+    chatbot_with_output = chatbot.with_structured_output(chatbot_output, method="function_calling")
 
     #System message initialization with today's date
     system_message = chatbot_message.format(
@@ -59,12 +59,21 @@ async def chatbot_node(state: AgentState) -> AgentState:
 
         trip_requests = [req.model_dump() for req in response.user_request] if response.user_request else []
 
+        # Ensure need_trip_plan is explicitly set based on the response
+        need_trip_plan = response.need_trip_plan
+        
+        # If it's a simple search request, ensure need_trip_plan is False
+        # This is a safety check in case the LLM misses the prompt instruction
+        if any(req.get("purpose") and "search" in req.get("purpose").lower() for req in trip_requests):
+            need_trip_plan = False
+
         return Command(
             update={
                 "messages": updated_messages,
                 "needs_clarification": response.needs_clarification,
                 "user_request": trip_requests,
-                "need_trip_plan": response.need_trip_plan
+                "need_trip_plan": need_trip_plan,
+                "route_to_orch": response.route_to_orch
             }
         )
 

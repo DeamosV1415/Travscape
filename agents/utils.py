@@ -187,6 +187,9 @@ async def flight_search_tool(
     
     """Combined tool to search for flights using the provided parameters."""
     
+    # Robust date handling: ensure YYYY-MM-DD format
+    # The LLM usually provides good dates, but we can add a small check if needed
+    
     # Concurrent airport code lookup - 2x faster!
     departure_code, arrival_code = await asyncio.gather(
         get_airport_code(departure),

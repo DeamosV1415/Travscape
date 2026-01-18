@@ -34,10 +34,10 @@ class BudgetInfo(BaseModel):
 
 class SearchTask(BaseModel):
     task_id: str=Field(description="Unique ID of the task. Eg: flight_search_1, hotel_search_1, flight_search_2, general_search_1, maps_text_search_1...")
-    search_type: Literal["transportation", "accomodation", "general_info", "destination_research"]=Field(description="Type of search.")
+    search_type: str = Field(description="Type of search. e.g., transportation, accomodation, general_info, destination_research, restaurant, attraction, activity")
     criteria: SearchCriteria=Field(description="Search parameters")
     for_day: int=Field(description="The day number in the trip plan this search is for.")
-    for_time_block: Literal["Morning", "Afternoon", "Evening"]=Field(description="The time block accociated with this search.")
+    for_time_block: str = Field(description="The time block associated with this search. e.g., Morning, Afternoon, Evening, or empty string for exploratory.")
     priority: Literal["high", "medium", "low"]=Field(description="Priority level of the search task.")
 
 class TripPlan(BaseModel):

@@ -51,13 +51,14 @@ async def planner_node(state:AgentState) -> AgentState:
 
           return Command(
               update={
-                  "messages": updated_messages
+                  "messages": updated_messages,
+                  "needs_clarification": response.needs_clarification
               }
           )
 
         else:
             plan_dict = response.plan.model_dump() if response.plan else {}
-            ai_response = AIMessage(content=f"Plan generated: {plan_dict}")
+            ai_response = AIMessage(content=f"Plan generated.")
             updated_messages = messages + [ai_response]
 
             # Extract task IDs from search_tasks
