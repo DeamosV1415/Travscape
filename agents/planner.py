@@ -1,7 +1,7 @@
 from agents.utils import get_today_str
 from dotenv import load_dotenv
 from langgraph.graph import StateGraph, END, START
-from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
+from langchain_core.messages import SystemMessage, AIMessage, HumanMessage, ToolMessage
 from langgraph.types import Command
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_openai import ChatOpenAI
@@ -32,8 +32,18 @@ async def planner_node(state:AgentState) -> AgentState:
         trip_details=trip_details
     )
 
+    # Filter messages: planner doesn't need ToolMessages (huge JSON payloads)
+    # and should only see recent context to stay within token limits
+    raw_messages = state["messages"]
+    filtered_messages = [
+        msg for msg in raw_messages
+        if not isinstance(msg, ToolMessage)
+    ]
+    # Keep only the last 10 non-tool messages for context
+    filtered_messages = filtered_messages[-10:]
+
     found_system_message = False
-    messages = state["messages"]
+    messages = filtered_messages
     for message in messages:
         if isinstance(message, SystemMessage):
             message.content = system_message

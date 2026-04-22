@@ -3,8 +3,8 @@ from typing import Literal
 
 class FlightSearchInput(BaseModel):
     """Input for flight search tool"""
-    departure: str = Field(description="Departure city or airport code")
-    arrival: str = Field(description="Arrival city or airport code")
+    departure: str = Field(description="Departure city name (e.g. 'Delhi', 'New York'). Do NOT use airport codes like DEL or JFK.")
+    arrival: str = Field(description="Arrival city name (e.g. 'San Francisco', 'London'). Do NOT use airport codes like SFO or LHR.")
     outbound_date: str = Field(description="Departure date in YYYY-MM-DD format")
     return_date: str = Field(default="", description="Return date in YYYY-MM-DD format (empty for one-way)")
     travel_class: Literal["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"] = Field(default="ECONOMY", description="Cabin class: economy, premium_economy, business, first")

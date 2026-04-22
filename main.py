@@ -2,6 +2,38 @@
 from agents.routing_and_graph import create_graph
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 import asyncio
+import json
+
+
+def _strip_json_state(text: str) -> str:
+    """Remove leaked JSON state blocks from response text.
+    These blocks come from structured output schemas leaking into the chat."""
+    STATE_KEYS = ('"user_request"', '"chatbot_reply"', '"need_clarification"', '"needs_clarification"')
+    result = []
+    i = 0
+    while i < len(text):
+        if text[i] == '{':
+            # Find matching closing brace
+            depth = 1
+            j = i + 1
+            while j < len(text) and depth > 0:
+                if text[j] == '{': depth += 1
+                elif text[j] == '}': depth -= 1
+                j += 1
+            block = text[i:j]
+            if any(k in block for k in STATE_KEYS):
+                i = j
+                # Skip trailing whitespace
+                while i < len(text) and text[i] in '\n\r ':
+                    i += 1
+                continue
+            else:
+                result.append(text[i])
+                i += 1
+        else:
+            result.append(text[i])
+            i += 1
+    return ''.join(result).strip()
 
 class TravelAssistant:
     """
@@ -16,29 +48,24 @@ class TravelAssistant:
     
     async def chat(self, message: str, thread_id: str):
         """
-        Stream only the NEWEST AI message content.
-        Handles cases where the graph might return the full history.
+        Stream only the FINAL AI message content from the graph execution.
+        Filters out intermediate node messages (planner routing, orchestrator reasoning).
         """
+        # Known intermediate messages that should never be shown to the user
+        SKIP_PATTERNS = (
+            "Let me create a detailed trip plan",
+            "Plan generated",
+            "I need some clarification",
+            "I'm not sure what to do next",
+        )
+
         try:
-            config = {"configurable": {"thread_id": thread_id}}
+            config = {"configurable": {"thread_id": thread_id}, "recursion_limit": 15}
             user_message = HumanMessage(content=message)
             
-            # 1. Get the current state to identify existing AI messages
-            current_state = await self.graph.aget_state(config)
-            existing_messages = current_state.values.get("messages", [])
+            # Collect all node outputs, we'll only stream the last meaningful one
+            collected_responses = []
             
-            # Get the last AI message content if it exists
-            last_ai_content = ""
-            for msg in reversed(existing_messages):
-                if isinstance(msg, AIMessage):
-                    last_ai_content = msg.content
-                    break
-            
-            streamed_anything = False
-            full_response_received = ""
-            
-            # ⭐ Use astream_events for more granular control if needed, 
-            # but sticking to 'updates' and fixing the logic.
             async for event in self.graph.astream(
                 {"messages": [user_message]},
                 config=config,
@@ -49,45 +76,40 @@ class TravelAssistant:
                     if not messages:
                         continue
                     
-                    # In LangGraph, the last message in the update is usually the most recent one
                     new_msg = messages[-1]
                     
                     if isinstance(new_msg, AIMessage) and new_msg.content:
-                        new_content = new_msg.content
+                        content = _strip_json_state(new_msg.content)
                         
-                        # If this message is exactly the same as the last one we saw in history, skip it
-                        if new_content == last_ai_content:
+                        if not content:
                             continue
-                            
-                        # If the new content starts with the old content, it's a "growing" message
-                        # We only want the part that was added.
-                        delta = new_content
-                        if last_ai_content and new_content.startswith(last_ai_content):
-                            delta = new_content[len(last_ai_content):].strip()
                         
-                        # If we've already streamed something in this turn, we only stream the delta 
-                        # relative to what we've already sent in this turn.
-                        if streamed_anything:
-                            if new_content.startswith(full_response_received):
-                                delta = new_content[len(full_response_received):]
-                            else:
-                                # This is a completely different message from a different node
-                                delta = "\n" + new_content
-                        
-                        if not delta:
+                        # Skip known intermediate messages
+                        if any(content.strip().startswith(pat) for pat in SKIP_PATTERNS):
                             continue
-                            
-                        # Update our tracking
-                        full_response_received = new_content
-                        streamed_anything = True
                         
-                        # Stream the delta with typewriter effect
-                        chunk_size = 5
-                        for i in range(0, len(delta), chunk_size):
-                            chunk_text = delta[i:i + chunk_size]
-                            yield chunk_text
-                            await asyncio.sleep(0.01)
+                        # Skip tool-calling messages (they have tool_calls but may also have content)
+                        if hasattr(new_msg, "tool_calls") and new_msg.tool_calls:
+                            continue
+                        
+                        collected_responses.append((node_name, content))
+            
+            # Stream the LAST meaningful response (which is typically the final answer)
+            # But if chatbot was the only node (greeting/clarification), use that
+            if not collected_responses:
+                return
+            
+            # Use the last collected response
+            final_content = collected_responses[-1][1]
+            
+            # Stream with typewriter effect
+            chunk_size = 5
+            for i in range(0, len(final_content), chunk_size):
+                chunk_text = final_content[i:i + chunk_size]
+                yield chunk_text
+                await asyncio.sleep(0.01)
             
         except Exception as e:
             print(f"Chat error: {e}")
             yield f"\n\nError: {e}"
+

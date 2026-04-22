@@ -21,7 +21,7 @@ async def chatbot_node(state: AgentState) -> AgentState:
         max_retries=2,
     )
 
-    chatbot_with_output = chatbot.with_structured_output(chatbot_output, method="function_calling")
+    chatbot_with_output = chatbot.with_structured_output(chatbot_output)
 
     #System message initialization with today's date
     system_message = chatbot_message.format(
@@ -42,7 +42,8 @@ async def chatbot_node(state: AgentState) -> AgentState:
         response = await chatbot_with_output.ainvoke(messages)
 
         # Create the main response message
-        ai_response = AIMessage(content=response.chatbot_reply)
+        reply_text = response.chatbot_reply or "Hello! I'm Trav, your travel planning assistant from Travscape. How can I help you today?"
+        ai_response = AIMessage(content=reply_text)
         updated_messages = messages + [ai_response]
 
         # Only append clarification question if it exists and has meaningful content
@@ -53,7 +54,7 @@ async def chatbot_node(state: AgentState) -> AgentState:
             "none, if no clarification is needed" not in response.clarification_question.lower()):
 
             # Combine the reply and clarification question in a single message
-            combined_content = f"{response.chatbot_reply}\n\n{response.clarification_question}"
+            combined_content = f"{reply_text}\n\n{response.clarification_question}"
             ai_response = AIMessage(content=combined_content)
             updated_messages = messages + [ai_response]
 

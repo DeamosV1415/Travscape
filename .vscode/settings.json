@@ -1,3 +1,7 @@
 {
-  "liveServer.settings.port": 5501
+  "liveServer.settings.port": 5501,
+  "python.defaultInterpreterPath": "c:/Users/neele/Music/Travscape/travenv/Scripts/python.exe",
+  "python.analysis.pythonPath": "c:/Users/neele/Music/Travscape/travenv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "python.terminal.activateEnvInCurrentTerminal": true
 }

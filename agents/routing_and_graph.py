@@ -5,6 +5,7 @@ from agents.chatbot import chatbot_node
 from agents.planner import planner_node
 from agents.orchestrator import orchestrator_node
 from agents.utils import flight_search_tool, maps_text_search, general_search
+from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from typing import Literal
 
@@ -16,20 +17,40 @@ def route_after_chatbot(state: AgentState) -> Literal["orchestrator", "__end__"]
         return "__end__"
 
 def route_after_orchestrator(state: AgentState) -> Literal["tools", "planner", "__end__"]:
-    """Route based on orchestrator's decision"""
-    next_action = state.get("next_action")
+    """
+    Route based on orchestrator's output
     
-    if next_action == "tools":
+    Priority order:
+    0. If iteration exceeded max → force end (circuit breaker)
+    1. If orchestrator called tools → go to tools
+    2. If orchestrator needs planner → go to planner
+    3. Otherwise → end (orchestrator provided final response or asked for clarification)
+    """
+    # CIRCUIT BREAKER: Force end if we've iterated too many times
+    iteration = state.get("iteration", 0)
+    max_iterations = state.get("max_iterations", 8)
+    if iteration >= max_iterations:
+        return "__end__"
+    
+    messages = state.get("messages", [])
+    
+    # Check the last message from orchestrator
+    if not messages:
+        return "__end__"
+    
+    last_message = messages[-1]
+    
+    # PRIORITY 1: If the last message has tool_calls, route to tools
+    if isinstance(last_message, AIMessage) and hasattr(last_message, "tool_calls") and last_message.tool_calls:
         return "tools"
-    elif next_action == "planner":
+    
+    # PRIORITY 2: If orchestrator signaled it needs planner, route to planner
+    if state.get("needs_planner"):
         return "planner"
-    elif next_action == "end":
-        return "__end__"
-    else:
-        # Default fallback
-        if state.get("pending_tasks"):
-            return "tools"
-        return "__end__"
+    
+    # PRIORITY 3: Otherwise, we're done (either complete or needs clarification)
+    # If needs_clarification is True, the chatbot will handle it on next user message
+    return "__end__"
 
 def route_after_planner(state: AgentState) -> Literal["chatbot", "orchestrator"]:
     """Route from planner back to orchestrator or chatbot"""

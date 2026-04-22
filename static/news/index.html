@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel News | Travescape</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="news.css?v=2">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+  <script type="module" src="../js/auth-handler.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <i class="ri-sparkle-fill" style="color: white; font-size: 1.2rem;"></i>
+      </div>
+      <div class="logo-text">Trav<span>escape</span></div>
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="nav-link"><i class="ri-home-5-line"></i> Home</a>
+      <a href="/explore/" class="nav-link"><i class="ri-compass-3-line"></i> Explore</a>
+      <a href="/chat/" class="nav-link"><i class="ri-message-3-line"></i> AI Planner</a>
+      <a href="/news/" class="nav-link active"><i class="ri-newspaper-line"></i> News</a>
+    </div>
+
+    <div class="nav-auth">
+      <div id="auth-buttons">
+        <a href="/account/login/" class="btn-ghost">Sign In</a>
+        <a href="/account/signup/" class="btn-primary">Get Started</a>
+      </div>
+      <div id="user-menu">
+        <a href="/account/profile/" class="user-btn">
+          <div class="user-avatar">
+            <img id="user-avatar" src="" alt="" style="display: none;">
+            <i class="ri-user-3-fill" style="color: #0a1628;"></i>
+          </div>
+          <span id="user-name">User</span>
+        </a>
+        <button class="logout-btn" id="logout-btn" title="Sign Out">
+          <i class="ri-logout-box-r-line"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- News Header -->
+  <section class="news-header">
+    <span class="section-tag">Travel News & Guides</span>
+    <h1>Stay Informed, Travel Better</h1>
+    <p>The latest travel news, tips, and inspiration from around the world</p>
+  </section>
+
+  <!-- Featured Article (filled by JS) -->
+  <section class="featured-section" id="featured-section" style="display:none;">
+    <article class="featured-article" id="featured-article">
+      <img id="featured-img" src="" alt="Featured">
+      <div class="featured-overlay"></div>
+      <div class="featured-content">
+        <span class="article-category">Featured</span>
+        <h2 id="featured-title"></h2>
+        <p id="featured-desc"></p>
+        <div class="article-meta">
+          <div>
+            <span class="author-name" id="featured-source"></span>
+            <span class="article-date" id="featured-date"></span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- News Grid (filled by JS) -->
+  <section class="news-section">
+    <!-- Loading skeleton -->
+    <div class="news-grid" id="news-grid">
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+      <div class="news-skeleton"><div class="skeleton-img"></div><div class="skeleton-lines"><div class="skeleton-line long"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div></div></div>
+    </div>
+
+    <!-- Error state -->
+    <div class="news-error" id="news-error" style="display:none;">
+      <i class="ri-wifi-off-line"></i>
+      <h3>Unable to load news</h3>
+      <p>Please check your connection and try again.</p>
+      <button class="btn-primary" onclick="fetchNews()">
+        <i class="ri-refresh-line"></i> Retry
+      </button>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="newsletter-card">
+      <div class="newsletter-content">
+        <i class="ri-mail-send-line"></i>
+        <h2>Get Travel Inspiration Weekly</h2>
+        <p>Subscribe to our newsletter for exclusive deals, destination guides, and travel tips.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Enter your email address">
+          <button class="btn-primary">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <div class="logo-icon">
+            <i class="ri-sparkle-fill" style="color: white; font-size: 1.2rem;"></i>
+          </div>
+          <div class="logo-text">Trav<span>escape</span></div>
+        </a>
+        <p>Discover extraordinary destinations and create unforgettable memories.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="ri-instagram-line"></i></a>
+          <a href="#" class="social-link"><i class="ri-twitter-x-line"></i></a>
+          <a href="#" class="social-link"><i class="ri-facebook-fill"></i></a>
+          <a href="#" class="social-link"><i class="ri-youtube-line"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/explore/">Destinations</a></li>
+          <li><a href="/explore/">Travel Guides</a></li>
+          <li><a href="/explore/">Hidden Gems</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/">About Us</a></li>
+          <li><a href="/news/">Blog</a></li>
+          <li><a href="/">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="/">Help Center</a></li>
+          <li><a href="/">Privacy</a></li>
+          <li><a href="/">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Travescape. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== NEWS LOADER ====================
+
+    const FALLBACK_IMG = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&auto=format&fit=crop';
+
+    // Category colors for visual variety
+    const CATEGORIES = ['Travel', 'Destinations', 'Tips', 'Adventure', 'Food', 'Culture', 'Luxury', 'Budget', 'News'];
+
+    function pickCategory(title) {
+      const lower = (title || '').toLowerCase();
+      if (lower.includes('hotel') || lower.includes('resort') || lower.includes('luxury')) return 'Luxury';
+      if (lower.includes('food') || lower.includes('restaurant') || lower.includes('cuisine')) return 'Food';
+      if (lower.includes('budget') || lower.includes('cheap') || lower.includes('save')) return 'Budget';
+      if (lower.includes('adventure') || lower.includes('trek') || lower.includes('hike')) return 'Adventure';
+      if (lower.includes('beach') || lower.includes('island')) return 'Destinations';
+      if (lower.includes('tip') || lower.includes('hack') || lower.includes('guide')) return 'Tips';
+      if (lower.includes('culture') || lower.includes('heritage') || lower.includes('museum')) return 'Culture';
+      return CATEGORIES[Math.floor(Math.random() * 3)]; // Travel, Destinations, or Tips
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return '';
+      const d = new Date(isoStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function timeAgo(isoStr) {
+      if (!isoStr) return '';
+      const diff = Date.now() - new Date(isoStr).getTime();
+      const hours = Math.floor(diff / 3600000);
+      if (hours < 1) return 'Just now';
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return `${days}d ago`;
+      return formatDate(isoStr);
+    }
+
+    async function fetchNews() {
+      const grid = document.getElementById('news-grid');
+      const errorEl = document.getElementById('news-error');
+      const featuredSection = document.getElementById('featured-section');
+
+      // Show skeletons, hide error
+      grid.style.display = '';
+      errorEl.style.display = 'none';
+
+      try {
+        const resp = await fetch('/api/news/travel?count=9');
+        if (!resp.ok) throw new Error(`Status ${resp.status}`);
+        const data = await resp.json();
+
+        if (!data.articles || data.articles.length === 0) {
+          throw new Error('No articles');
+        }
+
+        const articles = data.articles;
+
+        // First article = featured
+        const feat = articles[0];
+        document.getElementById('featured-img').src = feat.image || FALLBACK_IMG;
+        document.getElementById('featured-img').onerror = function() { this.src = FALLBACK_IMG; };
+        document.getElementById('featured-title').textContent = feat.title;
+        document.getElementById('featured-desc').textContent = feat.description;
+        document.getElementById('featured-source').textContent = feat.source;
+        document.getElementById('featured-date').textContent = formatDate(feat.publishedAt);
+        document.getElementById('featured-article').onclick = () => window.open(feat.url, '_blank');
+        document.getElementById('featured-article').style.cursor = 'pointer';
+        featuredSection.style.display = '';
+
+        // Rest = grid cards
+        const remaining = articles.slice(1);
+        grid.innerHTML = '';
+
+        remaining.forEach((art, idx) => {
+          const category = pickCategory(art.title);
+          const card = document.createElement('article');
+          card.className = 'news-card';
+          card.style.animationDelay = `${idx * 0.08}s`;
+          card.onclick = () => window.open(art.url, '_blank');
+
+          card.innerHTML = `
+            <div class="news-image">
+              <img src="${art.image || FALLBACK_IMG}" alt="${art.title}" onerror="this.src='${FALLBACK_IMG}'">
+              <span class="article-category">${category}</span>
+            </div>
+            <div class="news-content">
+              <h3>${art.title}</h3>
+              <p>${art.description || ''}</p>
+              <div class="article-meta">
+                <span class="article-source">${art.source}</span>
+                <span class="article-date">${timeAgo(art.publishedAt)}</span>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error('Failed to load news:', err);
+        grid.style.display = 'none';
+        featuredSection.style.display = 'none';
+        errorEl.style.display = 'flex';
+      }
+    }
+
+    // Load on page ready
+    fetchNews();
+  </script>
+</body>
+</html>

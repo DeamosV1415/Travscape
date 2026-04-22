@@ -1,0 +1,153 @@
+/* Explore Page Styles */
+
+.explore-header {
+  padding: 150px 40px 60px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(15, 40, 71, 0.5), transparent);
+}
+
+.explore-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.explore-header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+}
+
+.search-bar {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 60px;
+}
+
+.search-bar i {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.search-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber));
+  color: var(--primary-dark);
+  font-weight: 600;
+  border-radius: 50px;
+}
+
+.search-btn:hover {
+  box-shadow: 0 8px 25px rgba(212, 165, 116, 0.3);
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber));
+  border-color: transparent;
+  color: var(--primary-dark);
+}
+
+/* Explore Grid */
+.explore-grid-section {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.explore-grid .destination-card {
+  aspect-ratio: 3/4;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.destination-card:hover .wishlist-btn {
+  opacity: 1;
+}
+
+.wishlist-btn:hover {
+  background: #ef4444;
+}
+
+.wishlist-btn.active {
+  background: #ef4444;
+  opacity: 1;
+}
+
+.wishlist-btn.active i {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .explore-header {
+    padding: 120px 20px 40px;
+  }
+  .explore-grid-section {
+    padding: 20px;
+  }
+}
