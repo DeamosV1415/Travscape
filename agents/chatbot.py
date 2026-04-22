@@ -14,7 +14,7 @@ load_dotenv(override=True)
 async def chatbot_node(state: AgentState) -> AgentState:
 
     chatbot = ChatOpenAI(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         temperature=0,
         max_tokens=None,
         timeout=None,
@@ -42,7 +42,8 @@ async def chatbot_node(state: AgentState) -> AgentState:
         response = await chatbot_with_output.ainvoke(messages)
 
         # Create the main response message
-        ai_response = AIMessage(content=response.chatbot_reply)
+        reply_text = response.chatbot_reply or "Hello! I'm Trav, your travel planning assistant from Travscape. How can I help you today?"
+        ai_response = AIMessage(content=reply_text)
         updated_messages = messages + [ai_response]
 
         # Only append clarification question if it exists and has meaningful content
@@ -53,18 +54,27 @@ async def chatbot_node(state: AgentState) -> AgentState:
             "none, if no clarification is needed" not in response.clarification_question.lower()):
 
             # Combine the reply and clarification question in a single message
-            combined_content = f"{response.chatbot_reply}\n\n{response.clarification_question}"
+            combined_content = f"{reply_text}\n\n{response.clarification_question}"
             ai_response = AIMessage(content=combined_content)
             updated_messages = messages + [ai_response]
 
         trip_requests = [req.model_dump() for req in response.user_request] if response.user_request else []
+
+        # Ensure need_trip_plan is explicitly set based on the response
+        need_trip_plan = response.need_trip_plan
+        
+        # If it's a simple search request, ensure need_trip_plan is False
+        # This is a safety check in case the LLM misses the prompt instruction
+        if any(req.get("purpose") and "search" in req.get("purpose").lower() for req in trip_requests):
+            need_trip_plan = False
 
         return Command(
             update={
                 "messages": updated_messages,
                 "needs_clarification": response.needs_clarification,
                 "user_request": trip_requests,
-                "need_trip_plan": response.need_trip_plan
+                "need_trip_plan": need_trip_plan,
+                "route_to_orch": response.route_to_orch
             }
         )
 

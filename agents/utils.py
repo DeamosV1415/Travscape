@@ -187,6 +187,9 @@ async def flight_search_tool(
     
     """Combined tool to search for flights using the provided parameters."""
     
+    # Robust date handling: ensure YYYY-MM-DD format
+    # The LLM usually provides good dates, but we can add a small check if needed
+    
     # Concurrent airport code lookup - 2x faster!
     departure_code, arrival_code = await asyncio.gather(
         get_airport_code(departure),
@@ -218,9 +221,34 @@ async def flight_search_tool(
 
     return result
 
+def _trim_place(place: dict) -> dict:
+    """Strip verbose fields from a Google Maps place to reduce token usage.
+    Keeps only: displayName, formattedAddress, rating, websiteUri, priceLevel,
+    googleMapsUri, and weekday descriptions (not full period objects)."""
+    trimmed = {}
+    for key in ("displayName", "formattedAddress", "rating", "websiteUri",
+                "priceLevel", "googleMapsUri", "nationalPhoneNumber"):
+        if key in place:
+            trimmed[key] = place[key]
+    
+    # Keep only weekday descriptions from opening hours (drop verbose periods)
+    hours = place.get("regularOpeningHours")
+    if hours and isinstance(hours, dict):
+        descriptions = hours.get("weekdayDescriptions")
+        if descriptions:
+            trimmed["openingHours"] = descriptions
+        if "openNow" in hours:
+            trimmed["openNow"] = hours["openNow"]
+    
+    # Drop googleMapsLinks entirely (directions, review, photos URIs — never used)
+    return trimmed
+
+
 @tool(args_schema=MapSearch)
 async def maps_text_search(queries: list[str] | str):
     """Tool for maps text search. Accepts a single query string or a list of queries."""
+    
+    MAX_PLACES_PER_QUERY = 5  # Limit results to prevent context bloat
     
     # Handle both single query and list of queries
     if isinstance(queries, str):
@@ -240,10 +268,14 @@ async def maps_text_search(queries: list[str] | str):
         try:
             async with session.post(url, json=params, headers=headers) as response:
                 if response.status == 200:
+                    raw = await response.json()
+                    # Trim results: limit count and strip verbose fields
+                    places = raw.get("places", [])[:MAX_PLACES_PER_QUERY]
+                    trimmed_places = [_trim_place(p) for p in places]
                     return {
                         "query": query,
                         "success": True,
-                        "data": await response.json()
+                        "data": {"places": trimmed_places}
                     }
                 else:
                     text = await response.text()

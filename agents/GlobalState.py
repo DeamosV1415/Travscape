@@ -4,16 +4,18 @@ from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 import operator
 
 # State
-class AgentState(TypedDict):
+class AgentState(TypedDict, total=False):
   messages: Annotated[list, add_messages]
   user_request: list
   need_trip_plan: bool
   needs_clarification: bool
+  route_to_orch: bool
+  needs_planner: bool
   trip_plan: dict
   orchestrator_output: dict
   next_action: str
-  tool_results: Annotated[list, operator.add]
   pending_tasks: list
   completed_tasks: list
-  iteration: int
-  max_iterations: int
+  iteration: int        # defaults to 0 when absent
+  max_iterations: int   # defaults to 8 via .get() fallbacks in orchestrator/routing
+

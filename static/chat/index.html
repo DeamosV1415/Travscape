@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Travel Planner | Travescape</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="chat.css?v=5">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+  <script type="module" src="../js/auth-handler.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <i class="ri-sparkle-fill" style="color: white; font-size: 1.2rem;"></i>
+      </div>
+      <div class="logo-text">Trav<span>escape</span></div>
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="nav-link"><i class="ri-home-5-line"></i> Home</a>
+      <a href="/explore/" class="nav-link"><i class="ri-compass-3-line"></i> Explore</a>
+      <a href="/chat/" class="nav-link active"><i class="ri-message-3-line"></i> AI Planner</a>
+      <a href="/news/" class="nav-link"><i class="ri-newspaper-line"></i> News</a>
+    </div>
+
+    <div class="nav-auth">
+      <div id="auth-buttons">
+        <a href="/account/login/" class="btn-ghost">Sign In</a>
+        <a href="/account/signup/" class="btn-primary">Get Started</a>
+      </div>
+      <div id="user-menu">
+        <a href="/account/profile/" class="user-btn">
+          <div class="user-avatar">
+            <img id="user-avatar" src="" alt="" style="display: none;">
+            <i class="ri-user-3-fill" style="color: #0a1628;"></i>
+          </div>
+          <span id="user-name">User</span>
+        </a>
+        <button class="logout-btn" id="logout-btn" title="Sign Out">
+          <i class="ri-logout-box-r-line"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login Required Overlay -->
+  <div class="auth-gate" id="auth-gate">
+    <div class="auth-gate-content">
+      <div class="auth-gate-icon">
+        <i class="ri-lock-2-line"></i>
+      </div>
+      <h2>Sign In Required</h2>
+      <p>Please sign in to use the AI Travel Planner. Your conversations will be saved to your account.</p>
+      <div class="auth-gate-buttons">
+        <a href="/account/login/" class="btn-hero primary">
+          <i class="ri-login-box-line"></i>
+          Sign In
+        </a>
+        <a href="/account/signup/" class="btn-hero secondary">
+          Create Account
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Container (hidden until authenticated) -->
+  <div class="chat-container" id="chat-container" style="display: none;">
+    <!-- Sidebar -->
+    <aside class="chat-sidebar" id="chat-sidebar">
+      <button class="new-chat-btn" id="new-chat-btn">
+        <i class="ri-add-line"></i>
+        New Chat
+      </button>
+      <div class="chat-history" id="chat-history">
+        <div class="history-title">Recent Chats</div>
+        <div class="history-list" id="history-list"></div>
+      </div>
+    </aside>
+
+    <!-- Main Chat -->
+    <main class="chat-main">
+      <!-- Welcome Screen -->
+      <div class="welcome-screen" id="welcome-screen">
+        <div class="welcome-icon">
+          <i class="ri-compass-3-line"></i>
+        </div>
+        <h1>Welcome to Travescape AI</h1>
+        <p>Your intelligent travel companion. Ask me anything about destinations, itineraries, or travel tips.</p>
+        <div class="suggestions">
+          <button class="suggestion" data-query="Plan a 7-day trip to Japan">
+            <i class="ri-flight-takeoff-line"></i>
+            Plan a 7-day trip to Japan
+          </button>
+          <button class="suggestion" data-query="Best beaches in Southeast Asia">
+            <i class="ri-sun-line"></i>
+            Best beaches in Southeast Asia
+          </button>
+          <button class="suggestion" data-query="Budget-friendly European destinations">
+            <i class="ri-money-dollar-circle-line"></i>
+            Budget-friendly European destinations
+          </button>
+          <button class="suggestion" data-query="Adventure activities in New Zealand">
+            <i class="ri-riding-line"></i>
+            Adventure activities in New Zealand
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Container -->
+      <div class="messages-container" id="messages-container"></div>
+
+      <!-- Typing Indicator -->
+      <div class="typing-indicator" id="typing-indicator">
+        <div class="typing-bubble">
+          <span></span><span></span><span></span>
+          <span class="typing-text" id="typing-text">Trav is thinking...</span>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <textarea id="message-input" placeholder="Ask me anything about travel..." rows="1"></textarea>
+          <button class="send-btn" id="send-btn" disabled>
+            <i class="ri-send-plane-fill"></i>
+          </button>
+        </div>
+        <div class="input-footer">
+          <span id="char-count">0/2000</span>
+          <span>Powered by Travescape AI</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="chat.js?v=5"></script>
+</body>
+</html>
