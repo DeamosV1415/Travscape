@@ -143,6 +143,7 @@ body {
   margin-bottom: 15px;
   background: linear-gradient(135deg, var(--white), var(--accent-teal));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -568,6 +569,7 @@ body {
   margin-bottom: 15px;
   background: linear-gradient(135deg, var(--white), var(--accent-gold));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
